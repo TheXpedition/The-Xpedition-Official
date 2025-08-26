@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Xpedition — Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fg:#eaf2ff;
+  --muted:#9fb0c7;
+  --brd: rgba(255,255,255,.16);
+  --accent:#6ee7ff;
+
+  --txa:#39c9ff;    /* Antarctica */
+  --txs:#ff9a29;    /* Safari */
+  --txj:#ff3333;    /* Japan */
+  --sim:#ffb78e;    /* Simulator */
+  --tr:#b88936;     /* Traitor */
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  color:var(--fg);
+  background: radial-gradient(1400px 900px at 10% -20%, #0e1628, #0a1020 40%, #070a12 100%);
+}
+
+/* header */
+.header{ max-width:1400px; margin:12px auto 0; padding:6px 16px; display:flex; align-items:center; justify-content:flex-start; gap:10px }
+.brand{ display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.3px }
+.brand .dot{ width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 22px var(--accent) }
+
+/* hero */
+.hero{ position:relative; max-width:1400px; margin:10px auto 14px; padding:16px; }
+.hero-inner{
+  position:relative; height:min(60vh, 560px);
+  border-radius:22px; overflow:hidden;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+  border:1px solid var(--brd);
+  display:grid; grid-template-columns: 1.1fr .9fr;
+}
+@media (max-width: 960px){ .hero-inner{ grid-template-columns: 1fr; height:auto } }
+
+.hero-visual{ position:relative; overflow:hidden }
+.hero-visual .backdrop{
+  position:absolute; inset:0; background-size:cover; background-position:center; opacity:.38;
+  filter: saturate(120%) contrast(105%) brightness(110%);
+}
+.hero-visual .gradientTop{ position:absolute; inset:0; background: radial-gradient(120% 120% at 20% 20%, rgba(0,0,0,.0), rgba(0,0,0,.55)); }
+.hero-visual .gradientBottom{ position:absolute; inset:0; background: linear-gradient(0deg, rgba(0,0,0,.55), transparent 35%); mix-blend-mode:multiply; }
+.hero-visual .logo{
+  position:absolute; left:6%; bottom:7%; max-width:min(58vw, 720px); max-height: 180px;
+  filter: drop-shadow(0 14px 46px rgba(0,0,0,.45));
+}
+#heroFX{ position:absolute; inset:0; pointer-events:none; overflow:hidden }
+
+/* FX */
+.fx-snow .flake{ position:absolute; width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.92);
+  filter:blur(.5px); animation: fallSnow var(--dur) linear infinite; opacity:.75 }
+@keyframes fallSnow{ from{ transform: translate(var(--x), -10vh) } to{ transform: translate(calc(var(--x) + var(--sx)), 110vh) } }
+.fx-dust .puff{ position:absolute; width:120px; height:120px; border-radius:50%; background: radial-gradient(circle at 40% 40%, rgba(255,210,90,.8), rgba(255,154,41,.0) 60%); filter: blur(10px); mix-blend-mode: screen; opacity:.45; animation: driftDust var(--dur) ease-in-out infinite; }
+@keyframes driftDust{ 0%,100%{ transform:translate(var(--x), var(--y)) scale(.8)} 50%{ transform: translate(calc(var(--x) + var(--sx)), calc(var(--y) - 40px)) scale(1.05) } }
+.fx-petals .petal{ position:absolute; width:18px; height:14px; background: radial-gradient(circle at 60% 40%, #ffd1e6 0 50%, #ff9ac2 51% 100%); border-radius:12px 12px 12px 0; transform-origin: center; opacity:.9; animation: petalFall var(--dur) linear infinite; }
+@keyframes petalFall{ from{ transform: translate(var(--x), -10vh) rotate(0deg) } to{ transform: translate(calc(var(--x) + var(--sx)), 110vh) rotate(360deg) } }
+
+.hero-info{ position:relative; padding:30px 24px 24px; display:flex; flex-direction:column; gap:16px }
+.hero-kicker{ font-weight:900; font-size:13px; letter-spacing:.9px; text-transform:uppercase; color:var(--muted); }
+.hero-title{ font-weight:900; font-size:min(9vw, 68px); line-height:1.03; letter-spacing:-.02em; }
+.hero-meta{ color:var(--muted); font-weight:700; white-space:pre-line }
+.hero-actions{ display:flex; gap:10px; flex-wrap:wrap }
+.hero-actions .cta{
+  background:var(--accent-current, var(--accent)); color:#0b0f18; border:none; border-radius:12px; padding:12px 16px; font-weight:900; cursor:pointer;
+}
+.hero-actions .cta[disabled]{ background:#2b3242; color:#9aa7bd; cursor:not-allowed }
+.hero-actions .sec{ display:none } /* ya no mostramos secundarias */
+
+/* sections / rows */
+.section{ max-width:1400px; margin:0 auto; padding:4px 16px 24px }
+.section h3{ margin:0 0 10px; font-size:18px; font-weight:900; color:#dfe9ff }
+.row{ position:relative; overflow:hidden; border-radius:16px; background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--brd); }
+.track{ display:flex; gap:20px; overflow-x:auto; scroll-snap-type:x mandatory; padding:16px 18px; scrollbar-width:none }
+.track::-webkit-scrollbar{ display:none }
+
+/* LOGO-ONLY tiles */
+.card{
+  position:relative; display:flex; align-items:center; justify-content:center;
+  padding:0; margin:0; background:transparent; border:none;
+  scroll-snap-align:start; cursor:pointer; isolation:isolate; transform:translateZ(0);
+}
+.card:focus{ outline:none }
+.card .logo{
+  height:96px; width:auto; max-width: 520px; object-fit:contain;
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,.55)); transform-origin:center; transition: transform .18s ease, filter .18s ease;
+}
+.card:hover .logo{ transform: scale(1.2); filter: drop-shadow(0 12px 42px rgba(0,0,0,.7)); }
+.card[data-id="antarctica"]{ --accent-current: var(--txa) }
+.card[data-id="safari"]{ --accent-current: var(--txs) }
+.card[data-id="japan"]{ --accent-current: var(--txj) }
+.card[data-id="simulator"]{ --accent-current: var(--sim) }
+.card[data-id="traitor"]{ --accent-current: var(--tr) }
+.card:hover::after{
+  content:""; position:absolute; inset:-6px -10px; border-radius:18px;
+  background: radial-gradient(60% 60% at 50% 50%, var(--accent-current), transparent 60%);
+  opacity:.22; filter: blur(14px); z-index:-1;
+}
+.card[data-disabled="true"]::before{
+  content:"Próximamente"; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%);
+  font-weight:900; font-size:12px; background:rgba(0,0,0,.55); border:1px solid var(--brd); padding:6px 8px; border-radius:10px;
+}
+
+/* nav arrows */
+.nav{ position:absolute; top:50%; transform:translateY(-50%); height:100%; width:80px; display:flex; align-items:center; justify-content:center; background: linear-gradient(to var(--dir), rgba(7,10,18, .65), transparent); pointer-events:none; }
+.nav button{ pointer-events:auto; width:44px; height:44px; border-radius:999px; border:1px solid var(--brd); background:rgba(0,0,0,.5); color:#fff; font-weight:900; cursor:pointer }
+.nav.left{ left:0; --dir:right } .nav.right{ right:0; --dir:left }
+
+/* hero change animation */
+@keyframes heroIn{ from{ opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+.hero-anim .hero-title, .hero-anim .hero-meta, .hero-anim #heroLogo{ animation:heroIn .35s ease both }
+
+/* Preview overlay */
+.preview{
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  background: radial-gradient(120% 120% at 50% 20%, rgba(0,0,0,.82), rgba(0,0,0,.60));
+  backdrop-filter: blur(2px) saturate(130%); z-index:50; opacity:0; pointer-events:none; transition:opacity .18s ease;
+}
+.preview.show{ opacity:1; pointer-events:auto }
+.preview img{ max-width:min(70vw, 860px); max-height:62vh; object-fit:contain; filter: drop-shadow(0 18px 56px rgba(0,0,0,.65)); transform:scale(.94); animation: pop .22s ease forwards }
+@keyframes pop{ to{ transform:scale(1) } }
+.preview .hint{ position:absolute; bottom:24px; color:#c7d3ea; font-weight:800; opacity:.8 }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand"><span class="dot"></span> <span style="font-weight:900">THE XPEDITION</span></div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-inner" id="heroInner">
+    <div class="hero-visual">
+      <div class="backdrop" id="heroBackdrop"></div>
+      <div id="heroFX"></div>
+      <div class="gradientTop"></div>
+      <div class="gradientBottom"></div>
+      <img class="logo" id="heroLogo" alt="logo">
+    </div>
+    <div class="hero-info">
+      <div class="hero-kicker" id="heroKicker">Temporada</div>
+      <div class="hero-title" id="heroTitle">The Xpedition</div>
+      <div class="hero-meta" id="heroMeta">Año — · 18 participantes</div>
+      <div class="hero-actions">
+        <button class="cta" id="heroGo">Ir a la temporada</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h3>The Xpedition</h3>
+  <div class="row">
+    <div class="nav left"><button data-dir="-1">‹</button></div>
+    <div class="track" id="row-main">
+      <div class="card" data-row="main" data-id="antarctica" data-kind="Temporada" data-name="Antarctica"
+           data-meta="2022 · 18 Participantes"
+           data-backdrop=""
+           data-href="https://thexpedition.github.io/The-Xpedition-Antarctica/"
+           data-logo="TXA Logo Color.png,TXA%20Logo%20Color.png,logo-antarctica.png"
+           data-preview="logos/transparent/antarctica.png,logos/transparent/antarctica.webp">
+        <img class="logo" alt="Antarctica">
+      </div>
+      <div class="card" data-row="main" data-id="safari" data-kind="Temporada" data-name="Safari"
+           data-meta="2023 · 21 Participantes (Parte 1)
+ 2025 · 15 Participantes (Parte 2)"
+           data-backdrop=""
+           data-href="https://thexpedition.github.io/The-Xpedition-Safari/"
+           data-logo="TXS Logo Color.png,TXS%20Logo%20Color.png,logo-safari.png"
+           data-preview="logos/transparent/safari.png,logos/transparent/safari.webp">
+        <img class="logo" alt="Safari">
+      </div>
+      <div class="card" data-row="main" data-id="japan" data-kind="Temporada" data-name="Japan"
+           data-meta="Próximamente · 30 Participantes"
+           data-backdrop="" data-disabled="true"
+           data-logo="TXJ Logo Color.png,TXJ%20Logo%20Color.png,logo-japan.png"
+           data-preview="logos/transparent/japan.png,logos/transparent/japan.webp">
+        <img class="logo" alt="Japan">
+      </div>
+    </div>
+    <div class="nav right"><button data-dir="1">›</button></div>
+  </div>
+</section>
+
+<section class="section">
+  <h3>Spin Offs</h3>
+  <div class="row">
+    <div class="nav left"><button data-dir="-1">‹</button></div>
+    <div class="track" id="row-spinoff">
+      <div class="card" data-row="spinoff" data-id="simulator" data-kind="Spin Off" data-name="Simulator"
+           data-meta="Juego · Interactivo"
+           data-backdrop="" data-editable="true"
+           data-logo="TXSimulator Logo Color.png,TXSimulator%20Logo%20Color.png,simulator-logo.png"
+           data-preview="logos/transparent/simulator.png,logos/transparent/simulator.webp" data-href="https://thexpedition.github.io/The-Xpedition-Simulator/">
+        <img class="logo" alt="Simulator">
+      </div>
+      <div class="card" data-row="spinoff" data-id="traitor" data-kind="Spin Off" data-name="The Traitor"
+           data-meta="2023 · Próximamente"
+           data-backdrop="" data-editable="true"
+           data-logo="The Traitor 1 Logo Color.png,The%20Traitor%201%20Logo%20Color.png,traitor-logo.png"
+           data-preview="logos/transparent/traitor.png,logos/transparent/traitor.webp">
+        <img class="logo" alt="The Traitor">
+      </div>
+    </div>
+    <div class="nav right"><button data-dir="1">›</button></div>
+  </div>
+</section>
+
+<div class="preview" id="preview"><img id="previewImg" alt=""><div class="hint">Abriendo…</div></div>
+
+<script>
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>Array.from(el.querySelectorAll(s));
+
+/* generic loader for images from several candidates */
+function loadImageTo(img, candidatesStr){
+  const candidates = (candidatesStr||"").split(",").map(s=>s.trim()).filter(Boolean);
+  let i=0;
+  const tryNext=()=>{
+    if(i>=candidates.length) return;
+    const test=new Image();
+    test.onload=()=>{ img.src=test.src; };
+    test.onerror=()=>{ i++; tryNext(); };
+    test.src=candidates[i++];
+  };
+  tryNext();
+}
+$$('.card').forEach(c=> loadImageTo($('.logo', c), c.dataset.logo));
+
+/* rows nav */
+$$('.row').forEach(row=>{
+  const track = $('.track', row);
+  row.querySelectorAll('.nav button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      track.scrollBy({ left: (btn.dataset.dir==='1'? 1:-1) * (track.clientWidth*.9), behavior:'smooth' });
+    });
+  });
+});
+
+/* HERO */
+const hero = {
+  root: $('#heroInner'),
+  title: $('#heroTitle'),
+  kicker: $('#heroKicker'),
+  meta: $('#heroMeta'),
+  logo: $('#heroLogo'),
+  go: $('#heroGo'),
+  fx: $('#heroFX'),
+  backdrop: $('#heroBackdrop'),
+  setFromCard(card){
+    const kind = card.dataset.kind || '';
+    const name = card.dataset.name || '';
+    const id   = card.dataset.id;
+    const meta = (card.dataset.meta || '').replace(/\|/g, '\\n').trim();
+    const href = card.dataset.href || '';
+
+    this.kicker.textContent = kind;
+    this.title.textContent = 'The Xpedition ' + name;
+    this.meta.textContent = meta || '—';
+    this.go.textContent = (kind==='Temporada' ? 'Ir a la temporada' : 'Abrir');
+    this.go.disabled = !!card.dataset.disabled || !href;
+    this.go.onclick = ()=>{
+      if(card.dataset.disabled==='true'){ return; }
+      if(!href){ return; }
+      window.open(href, '_blank', 'noopener,noreferrer');
+    };
+
+    const a = getComputedStyle(card).getPropertyValue('--accent-current') || '#6ee7ff';
+    document.documentElement.style.setProperty('--accent', a);
+
+    loadImageTo(this.logo, card.dataset.logo);
+
+    const list = buildBackdropCandidates(card);
+    tryApplyBackdrop(this.backdrop, list);
+
+    this.fx.innerHTML='';
+    if(id==='antarctica') makeSnow(this.fx, 60);
+    else if(id==='safari') makeDust(this.fx, 10);
+    else if(id==='japan') makePetals(this.fx, 24);
+    else if(id==='traitor') makeDust(this.fx, 6);
+
+    this.root.classList.remove('hero-anim'); void this.root.offsetWidth; this.root.classList.add('hero-anim');
+  }
+};
+
+/* Backdrops */
+function buildBackdropCandidates(card){
+  const id = (card.dataset.id||'').toLowerCase();
+  const name = (card.dataset.name||'').trim();
+  const nameSlug = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  const base = [ `backdrops/${id}`, `backdrops/${nameSlug}`, `backdrops/the-xpedition-${nameSlug}`, `backdrops/${name}` ];
+  const exts = ['jpg','jpeg','png','webp','JPG','JPEG','PNG','WEBP'];
+  const c = [];
+  const user = (card.dataset.backdrop || '').split(',').map(s=>s.trim()).filter(Boolean);
+  c.push(...user); base.forEach(b=> exts.forEach(e=> c.push(`${b}.${e}`))); return c;
+}
+function tryApplyBackdrop(el, candidates){
+  let i=0; let applied=false;
+  function next(){
+    if(i>=candidates.length){ if(!applied){ el.style.backgroundImage='none'; } return; }
+    const src = candidates[i++]; const im = new Image();
+    im.onload = ()=>{ el.style.backgroundImage = `url('${im.src}')`; applied=true; };
+    im.onerror = next; im.src = src;
+  } next();
+}
+
+/* FX */
+function makeSnow(el,n){ el.className='fx-snow'; for(let i=0;i<n;i++){ const s=document.createElement('div'); s.className='flake';
+  s.style.setProperty('--x', (Math.random()*100)+'vw'); s.style.setProperty('--sx', ((Math.random()<.5?-1:1)*Math.random()*120)+'px');
+  s.style.setProperty('--dur', (6+Math.random()*10).toFixed(2)+'s'); s.style.left = Math.random()*100+'%'; s.style.top = (-10 + Math.random()*10)+'%'; el.appendChild(s); } }
+function makeDust(el,n){ el.className='fx-dust'; for(let i=0;i<n;i++){ const d=document.createElement('div'); d.className='puff';
+  d.style.setProperty('--x', (-40+Math.random()*40)+'px'); d.style.setProperty('--y', (200+Math.random()*140)+'px'); d.style.setProperty('--sx', (40+Math.random()*140)+'px'); d.style.setProperty('--dur', (6+Math.random()*8).toFixed(2)+'s');
+  d.style.left = (-20 + Math.random()*60)+'%'; d.style.bottom = (-10 + Math.random()*10)+'%'; el.appendChild(d); } }
+function makePetals(el,n){ el.className='fx-petals'; for(let i=0;i<n;i++){ const p=document.createElement('div'); p.className='petal';
+  p.style.setProperty('--x', (Math.random()*100)+'vw'); p.style.setProperty('--sx', ((Math.random()<.5?-1:1)*Math.random()*120)+'px'); p.style.setProperty('--dur', (8+Math.random()*10).toFixed(2)+'s');
+  p.style.left = Math.random()*100+'%'; p.style.top = (-10 + Math.random()*10)+'%'; el.appendChild(p); } }
+
+/* Preview + navigation */
+const previewDelay = 900;
+const preview = $('#preview'); const previewImg = $('#previewImg');
+function showPreviewFor(card, thenNavigate){
+  const id = (card.dataset.id||'').toLowerCase();
+  const name = (card.dataset.name||'').trim();
+  const nameSlug = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  const user = (card.dataset.preview || '').split(',').map(s=>s.trim()).filter(Boolean);
+  const base = [ `transparent/${id}`, `transparent/${nameSlug}`,  `logos/transparent/${id}`, `logos/transparent/${nameSlug}`,  `logos/${id}`, `logos/${nameSlug}` ];
+  const exts = ['png','webp','svg','PNG','WEBP','SVG'];
+  const c = [...user]; base.forEach(b=> exts.forEach(e=> c.push(`${b}.${e}`)));
+  c.push(...(card.dataset.logo||'').split(',').map(s=>s.trim()).filter(Boolean));
+
+  let i=0;
+  function next(){
+    if(i>=c.length){ thenNavigate(); return; }
+    const test=new Image();
+    test.onload=()=>{ previewImg.src = test.src; preview.classList.add('show'); setTimeout(()=>{ preview.classList.remove('show'); thenNavigate(); }, previewDelay); };
+    test.onerror=()=>{ i++; next(); };
+    test.src = c[i++];
+  }
+  next();
+}
+
+/* Interactions */
+$$('.card').forEach(card=>{
+  card.addEventListener('mouseenter', ()=> hero.setFromCard(card));
+  card.addEventListener('focus', ()=> hero.setFromCard(card));
+  card.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const href = card.dataset.href || '';
+    const disabled = card.dataset.disabled==='true';
+    if(disabled || !href) return;
+    showPreviewFor(card, ()=>{ window.open(href, '_blank', 'noopener,noreferrer'); });
+  });
+});
+hero.setFromCard($('.card[data-id="antarctica"]') || $('.card'));
+</script>
+</body>
+</html>
