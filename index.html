@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Xpedition — Hub</title>
+<title>The Xpedition — Página</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -16,6 +16,7 @@
   --txs:#ff9a29;    /* Safari */
   --txj:#ff3333;    /* Japan */
   --sim:#ffb78e;    /* Simulator */
+  --sim:#ffb78e;    /* Simulator Showdown */
   --tr:#b88936;     /* Traitor */
 }
 *{box-sizing:border-box}
@@ -98,6 +99,7 @@ body{
 .card[data-id="safari"]{ --accent-current: var(--txs) }
 .card[data-id="japan"]{ --accent-current: var(--txj) }
 .card[data-id="simulator"]{ --accent-current: var(--sim) }
+.card[data-id="showdown"]{ --accent-current: var(--sim) }
 .card[data-id="traitor"]{ --accent-current: var(--tr) }
 .card:hover::after{
   content:""; position:absolute; inset:-6px -10px; border-radius:18px;
@@ -162,7 +164,7 @@ body{
     <div class="nav left"><button data-dir="-1">‹</button></div>
     <div class="track" id="row-main">
       <div class="card" data-row="main" data-id="antarctica" data-kind="Temporada" data-name="Antarctica"
-           data-meta="2022 · 18 Participantes"
+           data-meta="Season 1 · 2022"
            data-backdrop=""
            data-href="https://thexpedition.github.io/The-Xpedition-Antarctica/"
            data-logo="TXA Logo Color.png,TXA%20Logo%20Color.png,logo-antarctica.png"
@@ -170,8 +172,8 @@ body{
         <img class="logo" alt="Antarctica">
       </div>
       <div class="card" data-row="main" data-id="safari" data-kind="Temporada" data-name="Safari"
-           data-meta="2023 · 21 Participantes (Parte 1)
- 2025 · 15 Participantes (Parte 2)"
+           data-meta="Season 2 · 2023 (Parte 1)
+ Season 2 · 2025 (Parte 2)"
            data-backdrop=""
            data-href="https://thexpedition.github.io/The-Xpedition-Safari/"
            data-logo="TXS Logo Color.png,TXS%20Logo%20Color.png,logo-safari.png"
@@ -179,7 +181,7 @@ body{
         <img class="logo" alt="Safari">
       </div>
       <div class="card" data-row="main" data-id="japan" data-kind="Temporada" data-name="Japan"
-           data-meta="Próximamente · 30 Participantes"
+           data-meta="Season 3 · Próximamente"
            data-backdrop="" data-disabled="true"
            data-logo="TXJ Logo Color.png,TXJ%20Logo%20Color.png,logo-japan.png"
            data-preview="logos/transparent/japan.png,logos/transparent/japan.webp">
@@ -202,11 +204,18 @@ body{
            data-preview="logos/transparent/simulator.png,logos/transparent/simulator.webp" data-href="https://thexpedition.github.io/The-Xpedition-Simulator/">
         <img class="logo" alt="Simulator">
       </div>
+ <div class="card" data-row="spinoff" data-id="showdown" data-kind="Spin Off" data-name="Showdown"
+           data-meta="Juego · Interactivo"
+           data-backdrop="" data-editable="true"
+           data-logo="TXShowdown Logo Color.png,TXShowdown%20Logo%20Color.png,simulator-logo.png"
+           data-preview="logos/transparent/showdown.png,logos/transparent/showdown.webp" data-href="https://thexpedition.github.io/The-Xpedition-Showdown-Simulator/">
+        <img class="logo" alt="Showdown">
+      </div>
       <div class="card" data-row="spinoff" data-id="traitor" data-kind="Spin Off" data-name="The Traitor"
-           data-meta="2023 · Próximamente"
+           data-meta="Season 1 · 2023"
            data-backdrop="" data-editable="true"
            data-logo="The Traitor 1 Logo Color.png,The%20Traitor%201%20Logo%20Color.png,traitor-logo.png"
-           data-preview="logos/transparent/traitor.png,logos/transparent/traitor.webp">
+           data-preview="logos/transparent/traitor.png,logos/transparent/traitor.webp" data-href="https://thexpedition.github.io/The-Traitor/">
         <img class="logo" alt="The Traitor">
       </div>
     </div>
