@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Xpedition — Universe</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fg:#eaf2ff; --muted:#9fb0c7; --brd:rgba(255,255,255,.12); --accent:#0056ff;
+  --bg-main:#05080f; --bg-sidebar:#0a0f1c; --bg-card:rgba(255,255,255,.03);
+  --txa:#39c9ff; --txs:#ff9a29; --txj:#ff3333; --sim:#00d4ff; --shw:#bf39ff; --tr:#b88936; --c1:#20d880;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:'Manrope',sans-serif;color:var(--fg);background:var(--bg-main);overflow:hidden}
+body{background:radial-gradient(circle at top right,#111a30 0%,var(--bg-main) 55%)}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.3)}
+.hidden{display:none!important}
+.app-container{display:flex;height:100vh;width:100vw;overflow:hidden}
+.hero-sidebar{width:38%;min-width:400px;max-width:550px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:20px 0 50px rgba(0,0,0,.9);z-index:100;background:var(--bg-sidebar);overflow:hidden}
+.hero-sidebar .backdrop{position:absolute;inset:0;background-size:cover;background-position:center top;background-repeat:no-repeat;opacity:.5;transition:.4s ease;filter:saturate(120%)}
+.hero-sidebar .gradient-overlay{position:absolute;inset:0;background:linear-gradient(0deg,var(--bg-sidebar) 5%,rgba(10,15,28,.6) 45%,transparent 100%)}
+.hero-content{position:relative;z-index:3;padding:40px;display:flex;flex-direction:column;gap:12px}
+.hero-logo{max-width:80%;max-height:160px;object-fit:contain;margin-bottom:10px;filter:drop-shadow(0 10px 20px rgba(0,0,0,.8));transform-origin:left bottom}
+.hero-kicker{font-weight:900;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}
+.hero-title{font-weight:900;font-size:32px;line-height:1.1;margin:0}
+.hero-meta{color:var(--muted);font-weight:600;font-size:14px;margin:0}
+.hero-desc{font-weight:500;font-size:14px;line-height:1.5;color:#c7d3ea;margin:10px 0 20px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hero-actions{display:flex;gap:12px;align-items:center}
+.btn-cta{background:linear-gradient(135deg,var(--accent) 0%,rgba(255,255,255,.2) 200%);color:#fff;border:none;border-radius:12px;padding:14px 24px;font-weight:800;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;flex:1;transition:.2s;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.btn-cta:hover{transform:translateY(-1px) scale(1.02);box-shadow:0 15px 35px rgba(0,0,0,.5)}
+.btn-icon{background:rgba(0,0,0,.4);backdrop-filter:blur(5px);border:1px solid var(--brd);color:#fff;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:.2s}
+.btn-icon:hover{background:rgba(255,255,255,.15)}
+.btn-icon.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.main-content{flex:1;display:flex;flex-direction:column;position:relative;overflow-y:auto;overflow-x:hidden}
+.top-nav{display:flex;align-items:center;padding:25px 40px;gap:30px;position:sticky;top:0;z-index:1000;background:linear-gradient(180deg,rgba(5,8,15,1) 0%,rgba(5,8,15,.82) 70%,transparent 100%);backdrop-filter:blur(8px)}
+.brand-logo{font-weight:900;font-size:18px;letter-spacing:1px;color:#fff;cursor:pointer;user-select:none}
+.brand-logo span{color:var(--muted);font-weight:400}
+.nav-links{display:flex;gap:24px;flex:1;flex-wrap:wrap}
+.nav-links a{color:var(--muted);text-decoration:none;font-weight:700;font-size:14px;transition:.2s;cursor:pointer}
+.nav-links a:hover,.nav-links a.active{color:#fff}
+.nav-actions{display:flex;align-items:center;gap:20px;position:relative}
+.search-icon{color:var(--muted);cursor:pointer;transition:.2s}
+.search-icon:hover{color:#fff;transform:scale(1.1)}
+.user-profile{width:40px;height:40px;border-radius:50%;background:#2b3242;cursor:pointer;border:2px solid transparent;transition:.2s;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;overflow:hidden;position:relative;z-index:1001;background-size:cover;background-position:center center;background-repeat:no-repeat;flex-shrink:0}
+.user-profile:hover{border-color:var(--accent);transform:scale(1.05)}
+.profile-dropdown{position:absolute;top:55px;right:0;background:rgba(15,20,35,.95);backdrop-filter:blur(15px);border:1px solid var(--brd);border-radius:16px;width:260px;padding:10px;display:flex;flex-direction:column;gap:5px;opacity:0;pointer-events:none;transform:translateY(-10px);transition:.2s;box-shadow:0 10px 30px rgba(0,0,0,.8);z-index:1000}
+.profile-dropdown.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+.profile-dropdown button{background:transparent;border:none;color:var(--muted);font-family:inherit;font-weight:600;font-size:14px;text-align:left;padding:12px 15px;border-radius:10px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:10px}
+.profile-dropdown button:hover{background:rgba(255,255,255,.08);color:#fff}
+.profile-dropdown hr{border:none;border-top:1px solid var(--brd);margin:5px 0}
+.view-container{flex:1;padding-top:20px}
+.view-section{display:none;padding:0 40px 40px;animation:fadeIn .35s ease}
+.view-section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-size:15px;font-weight:800;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin:0 0 16px 0;display:flex;align-items:center;gap:10px}
+.section-title::before{content:"";width:12px;height:2px;background:var(--accent)}
+.section-subtitle{font-size:12px;color:#5c6c85;font-weight:600;margin-top:-10px;margin-bottom:16px}
+.row-container{position:relative;margin-bottom:40px}
+.track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:20px;scrollbar-width:none;scroll-behavior:smooth}
+.track::-webkit-scrollbar{display:none}
+.card{flex-shrink:0;position:relative;background:var(--bg-card);border:1px solid var(--brd);border-radius:16px;cursor:pointer;scroll-snap-align:start;transition:.3s;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.card:hover{transform:translateY(-8px) scale(1.02);border-color:var(--accent-current,#fff);box-shadow:0 15px 30px rgba(0,0,0,.5);z-index:5}
+.card-bg-layer{position:absolute;inset:0;background-size:cover;background-position:center top;background-repeat:no-repeat;opacity:.4;transition:.3s;z-index:0}
+.card:hover .card-bg-layer{opacity:.72;filter:saturate(1.2)}
+.card-gradient{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.95) 0%,transparent 72%);z-index:1}
+.card .logo{position:relative;z-index:2;max-width:85%;max-height:60%;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8));transition:.3s;margin-bottom:20px}
+.card:hover .logo{transform:scale(1.1)}
+.card-info{position:absolute;bottom:12px;left:12px;right:12px;z-index:3;text-align:center;pointer-events:none}
+.card-info .name{font-weight:800;font-size:14px;margin:0 0 2px;text-shadow:0 2px 4px rgba(0,0,0,1)}
+.card-info .meta{font-size:11px;color:#a4b5cf;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,1)}
+.fallback-title{z-index:2;margin-bottom:20px;font-weight:900;text-align:center;padding:0 10px}
+.track-xpedition .card{width:320px;height:320px}
+.track-campria .card{width:160px;height:240px}
+.track-campria .card .card-bg-layer{opacity:.8}
+.track-campria .card:hover .card-bg-layer{opacity:1}
+.track-campria .card .card-gradient{background:linear-gradient(0deg,rgba(0,0,0,.82) 0%,transparent 40%)}
+.track-campria .card-info{display:none}
+.track-spinoff .card,.track-sim .card{width:280px;height:160px;justify-content:center;align-items:center}
+.track-spinoff .card .logo,.track-sim .card .logo{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);margin:0;max-width:80%;max-height:65%;z-index:2}
+.track-spinoff .card:hover .logo,.track-sim .card:hover .logo{transform:translate(-50%,-50%) scale(1.1)}
+.track-spinoff .fallback-title,.track-sim .fallback-title{display:none}
+.track-spinoff .card-info,.track-sim .card-info{bottom:10px}
+.explore-wrapper{display:flex;flex-direction:column;align-items:center;gap:12px;scroll-snap-align:start;flex-shrink:0;width:160px}
+.explore-wrapper .card{width:160px;height:160px;border-radius:50%;padding:0;margin:0;border:2px solid var(--brd);cursor:pointer;flex-shrink:0}
+.explore-wrapper .card .card-bg-layer{opacity:1}
+.explore-wrapper .card:hover .card-bg-layer{opacity:1;transform:scale(1.08)}
+.explore-wrapper .card .card-gradient{display:none}
+.explore-wrapper .card .logo{display:none!important}
+.explore-wrapper .card-info{display:none}
+.explore-name{font-weight:800;font-size:14px;text-align:center;margin:0;line-height:1.2}
+.nav-arrow{position:absolute;top:0;bottom:20px;width:45px;background:rgba(5,8,15,.7);border:none;color:#fff;font-size:35px;font-weight:900;cursor:pointer;z-index:20;transition:.2s;display:flex;align-items:center;justify-content:center}
+.nav-arrow:hover{background:rgba(5,8,15,.95);font-size:45px}
+.nav-arrow.left{left:-20px;background:linear-gradient(90deg,rgba(5,8,15,1) 0%,rgba(5,8,15,.7) 60%,transparent 100%)}
+.nav-arrow.right{right:-20px;background:linear-gradient(-90deg,rgba(5,8,15,1) 0%,rgba(5,8,15,.7) 60%,transparent 100%)}
+.grid-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;padding-bottom:40px}
+.grid-container .card{width:100%;height:280px}
+.about-hero{text-align:center;padding:0 0 60px;max-width:850px;margin:0 auto}
+.about-hero h1{font-size:48px;font-weight:900;margin-bottom:20px;background:linear-gradient(90deg,#fff,var(--muted));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.about-hero p{font-size:16px;line-height:1.8;color:#a4b5cf;margin-bottom:25px}
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:30px;margin-top:40px}
+.staff-card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:15px}
+.staff-icon{width:100px;height:100px;border-radius:50%;background-color:#1a233a;background-size:cover;background-position:center top;background-repeat:no-repeat;border:2px solid var(--brd);box-shadow:0 10px 20px rgba(0,0,0,.5)}
+.staff-name{font-weight:800;font-size:16px;margin:0}
+.staff-role{font-size:13px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+#view-search .search-header{display:flex;align-items:center;background:rgba(255,255,255,.05);border:1px solid var(--brd);border-radius:14px;padding:15px 20px;margin-bottom:40px}
+#view-search .search-header svg{color:var(--muted);margin-right:15px}
+#view-search input{flex:1;background:transparent;border:none;color:#fff;font-size:20px;font-weight:600;outline:none;font-family:inherit}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.25s}
+.modal-overlay.active{opacity:1;pointer-events:auto}
+.auth-box{background:var(--bg-sidebar);border:1px solid var(--brd);border-radius:22px;width:100%;max-width:720px;padding:40px;box-shadow:0 25px 50px rgba(0,0,0,1);position:relative;display:flex;flex-direction:column;max-height:90vh;overflow:auto}
+.auth-close{position:absolute;top:15px;right:15px;background:transparent;border:none;color:var(--muted);font-size:28px;cursor:pointer}
+.auth-box h2{margin:0 0 16px;font-weight:900;font-size:24px;text-align:center}
+.modal-note{margin:0 0 18px;color:#a4b5cf;font-size:13px;line-height:1.5;text-align:center}
+.auth-input{width:100%;padding:14px;margin-bottom:12px;border-radius:10px;border:1px solid var(--brd);background:rgba(0,0,0,.3);color:#fff;font-family:inherit;font-size:15px;outline:none}
+.auth-input:focus{border-color:var(--accent)}
+.auth-btn{width:100%;padding:14px;border-radius:10px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;border:none;transition:.2s;background:rgba(255,255,255,.1);color:#fff}
+.auth-btn:hover{background:rgba(255,255,255,.2)}
+.auth-btn.primary{background:var(--accent)}
+.auth-btn.primary:hover{filter:brightness(1.08)}
+.auth-btn.danger{background:rgba(255,68,68,.12);color:#ffb3b3;border:1px solid rgba(255,68,68,.28)}
+.auth-btn.danger:hover{background:rgba(255,68,68,.2)}
+.auth-btn.secondary{background:rgba(255,255,255,.08)}
+.avatar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:15px;margin-top:20px;max-height:52vh;overflow-y:auto;padding:5px}
+.avatar-choice{width:100%;aspect-ratio:1;border-radius:50%;background-color:#1a233a;background-size:cover;background-position:center top;background-repeat:no-repeat;cursor:pointer;border:3px solid transparent;display:block;transition:.2s;box-shadow:0 5px 15px rgba(0,0,0,.5)}
+.avatar-choice:hover{border-color:var(--accent);transform:scale(1.08);box-shadow:0 10px 25px rgba(0,0,0,.8)}
+.avatar-choice.selected{border-color:#fff}
+.search-list{max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-top:15px}
+.user-search-item{display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,255,255,.05);border-radius:12px;cursor:pointer;transition:.2s}
+.user-search-item:hover{background:rgba(255,255,255,.1);transform:translateX(2px)}
+.user-search-av{width:42px;height:42px;border-radius:50%;background-color:#2b3242;background-size:cover;background-position:center top;background-repeat:no-repeat;flex-shrink:0}
+.user-search-info{min-width:0}
+.user-search-info strong{display:block;font-size:14px}
+.user-search-info span{display:block;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chat-container{display:flex;height:calc(100vh - 200px);background:rgba(255,255,255,.02);border:1px solid var(--brd);border-radius:18px;overflow:hidden}
+.chat-sidebar{width:310px;border-right:1px solid var(--brd);background:rgba(0,0,0,.2);display:flex;flex-direction:column}
+.chat-header{padding:20px;font-weight:800;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.chat-header-actions{display:flex;gap:8px}
+.btn-icon-small{background:rgba(255,255,255,.1);border:none;color:#fff;border-radius:50%;width:32px;height:32px;cursor:pointer;font-weight:900;transition:.2s;display:flex;align-items:center;justify-content:center}
+.btn-icon-small:hover{background:var(--accent)}
+.chat-list{flex:1;overflow-y:auto;padding:10px}
+.chat-contact{display:flex;align-items:center;gap:14px;padding:12px;border-radius:12px;cursor:pointer;transition:.2s}
+.chat-contact:hover,.chat-contact.active{background:rgba(255,255,255,.08)}
+.chat-contact .av{width:45px;height:45px;border-radius:50%;background-color:#444;background-size:cover;background-position:center top;background-repeat:no-repeat;display:flex;align-items:center;justify-content:center;font-weight:800;overflow:hidden;flex-shrink:0}
+.chat-contact .info{flex:1;overflow:hidden}
+.chat-contact .name{font-weight:700;font-size:14px;margin:0 0 4px}
+.chat-contact .msg{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
+.chat-main{flex:1;display:flex;flex-direction:column;background:var(--bg-sidebar)}
+.chat-main-header{padding:20px;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center;font-weight:800;gap:10px}
+.chat-main-header .chat-title-wrap{display:flex;flex-direction:column;gap:4px;min-width:0}
+.chat-main-header .chat-title-wrap span:first-child{font-size:15px}
+.chat-main-header .chat-subtitle{color:var(--muted);font-weight:600;font-size:12px}
+.chat-history{flex:1;padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:15px}
+.msg-row{display:flex;align-items:flex-end;gap:10px;max-width:78%}
+.msg-row.me{align-self:flex-end;flex-direction:row-reverse}
+.msg-avatar{width:36px;height:36px;border-radius:50%;background:#2b3242;background-size:cover;background-position:center top;background-repeat:no-repeat;flex-shrink:0}
+.msg-stack{display:flex;flex-direction:column;gap:6px;min-width:0}
+.msg-head{font-size:12px;color:var(--muted);font-weight:700;margin-left:2px}
+.msg-bubble{padding:12px 16px;border-radius:15px;font-size:14px;line-height:1.4;white-space:pre-wrap;word-break:break-word;position:relative}
+.msg-row.received .msg-bubble{background:#1a233a;border-bottom-left-radius:2px}
+.msg-row.me .msg-bubble{background:var(--accent);color:#fff;border-bottom-right-radius:2px}
+.reaction-bar{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.react-btn{border:none;background:rgba(255,255,255,.08);color:#fff;border-radius:999px;padding:5px 8px;font-size:12px;cursor:pointer;transition:.15s}
+.react-btn:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}
+.react-btn.active{background:rgba(255,255,255,.22);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.react-count{font-size:11px;color:var(--muted);margin-left:4px}
+.chat-input{padding:20px;border-top:1px solid var(--brd);display:flex;gap:10px}
+.chat-input input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--brd);padding:15px;border-radius:25px;color:#fff;outline:none;font-family:inherit}
+.chat-input button{background:var(--accent);color:#fff;border:none;width:50px;height:50px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.chat-input button:hover{transform:scale(1.1)}
+.chat-input.disabled{opacity:.5;pointer-events:none}
+.profile-view{display:grid;grid-template-columns:minmax(240px,320px) 1fr;gap:24px;align-items:start}
+.profile-portrait{background:rgba(255,255,255,.04);border:1px solid var(--brd);border-radius:26px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.profile-avatar{width:100%;aspect-ratio:1;border-radius:22px;background:#1a233a;background-size:cover;background-position:center top;background-repeat:no-repeat;box-shadow:0 15px 30px rgba(0,0,0,.35)}
+.profile-name{font-size:32px;font-weight:900;margin:18px 0 6px}
+.profile-sub{color:var(--muted);font-size:13px;font-weight:600;margin:0 0 14px}
+.profile-follow-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.profile-follow-row .auth-btn{margin-bottom:0;flex:1;min-width:150px}
+.profile-panel{display:flex;flex-direction:column;gap:16px}
+.profile-topline{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.profile-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.stat-card{background:rgba(255,255,255,.04);border:1px solid var(--brd);border-radius:18px;padding:15px 16px}
+.stat-card .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1.4px;font-weight:800;margin-bottom:6px}
+.stat-card .value{font-size:22px;font-weight:900}
+.profile-notes{background:rgba(255,255,255,.04);border:1px solid var(--brd);border-radius:18px;padding:16px}
+.profile-notes h3{margin:0 0 10px;font-size:15px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted)}
+.profile-notes p{margin:0;color:#c7d3ea;line-height:1.6}
+.badge-row{display:flex;flex-wrap:wrap;gap:8px}
+.badge{border:1px solid var(--brd);background:rgba(255,255,255,.04);color:#dce7ff;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:700}
+.editor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:10px}
+.editor-grid input,.editor-grid select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--brd);background:rgba(0,0,0,.3);color:#fff;font-family:inherit;outline:none}
+.editor-grid label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.group-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.group-tab{padding:10px 13px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--brd);cursor:pointer;color:#fff;font-weight:700}
+.group-tab.active{background:var(--accent)}
+.group-list{max-height:320px;overflow:auto;display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.group-member-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid var(--brd)}
+.group-member-left{display:flex;align-items:center;gap:10px;min-width:0}
+.group-member-left .mini-avatar{width:34px;height:34px;border-radius:50%;background:#2b3242;background-size:cover;background-position:center top;background-repeat:no-repeat;flex-shrink:0}
+.group-member-left strong{display:block}
+.group-member-left span{display:block;color:var(--muted);font-size:12px}
+.group-pill{font-size:11px;font-weight:800;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--brd)}
+@media (max-width:1100px){
+  .hero-sidebar{width:34%;min-width:320px}
+  .top-nav{padding:20px 20px;gap:18px}
+  .view-section{padding:0 20px 30px}
+}
+@media (max-width:900px){
+  html,body{overflow:auto}
+  .app-container{flex-direction:column;height:auto;min-height:100vh}
+  .hero-sidebar{width:100%;min-width:0;max-width:none;height:280px;box-shadow:none}
+  .main-content{overflow:visible}
+  .chat-container{height:auto;min-height:60vh;flex-direction:column}
+  .chat-sidebar{width:100%;max-height:250px;border-right:none;border-bottom:1px solid var(--brd)}
+  .profile-view{grid-template-columns:1fr}
+}
+.toast{position:fixed;right:18px;bottom:18px;z-index:4000;padding:12px 16px;border-radius:14px;background:rgba(10,15,28,.95);border:1px solid var(--brd);box-shadow:0 14px 30px rgba(0,0,0,.45);color:#fff;font-size:14px;opacity:0;transform:translateY(8px);pointer-events:none;transition:.25s ease;max-width:min(420px,calc(100vw - 36px))}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.success{border-color:rgba(32,216,128,.35)}
+.toast.error{border-color:rgba(255,68,68,.35)}
+
+/* --- BLOQUE DE CHAT ESTILO WHATSAPP (FIX DE ANCHO Y ALTO) --- */
+.msg-row { 
+  display: flex; 
+  flex-direction: column; 
+  width: 100%; 
+  margin-bottom: 6px; 
+  align-items: flex-start; /* Por defecto alineado a la izquierda */
+}
+
+.msg-row.me { 
+  align-items: flex-end; /* Si es mio, a la derecha */
+}
+
+.msg-stack { 
+  display: flex; 
+  flex-direction: column; 
+  max-width: 85%; /* No deja que el mensaje sea tan ancho */
+  position: relative;
+}
+
+.msg-bubble { 
+  position: relative; 
+  width: fit-content; /* IMPORTANTE: Esto hace que el ancho se acople al texto */
+  height: auto;       /* IMPORTANTE: Esto hace que el alto se acople al texto */
+  padding: 8px 12px 6px 12px; 
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.3;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.msg-row.me .msg-bubble { 
+  background: #0056ff; /* Azul para mensajes enviados */
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.msg-row.received .msg-bubble { 
+  background: #1e2638; /* Gris oscuro para recibidos */
+  color: #fff;
+  border-bottom-left-radius: 4px;
+}
+
+/* El botón de la carita de reacción */
+.reaction-trigger {
+  position: absolute; 
+  top: 50%; 
+  transform: translateY(-50%);
+  background: rgba(26, 35, 58, 0.9);
+  border: 1px solid var(--brd);
+  border-radius: 50%;
+  width: 24px; height: 24px;
+  display: none; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px;
+}
+.msg-row:hover .reaction-trigger { display: flex; }
+.msg-row.me .reaction-trigger { left: -30px; }
+.msg-row.received .reaction-trigger { right: -30px; }
+
+/* Selector de Emojis */
+.reaction-picker {
+  position: absolute; bottom: 100%; right: 0;
+  background: #1a233a; border: 1px solid var(--brd);
+  border-radius: 30px; padding: 6px 10px; display: none; gap: 8px; 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5); z-index: 9999;
+}
+.reaction-picker.active { display: flex; }
+.reaction-picker span { cursor: pointer; font-size: 20px; transition: transform 0.1s; }
+.reaction-picker span:hover { transform: scale(1.2); }
+
+/* Barra de reacciones debajo del mensaje */
+.reaction-bar { display: flex; gap: 4px; margin-top: -8px; padding: 0 8px; }
+.react-pill { 
+  background: #2b3242; border: 1px solid var(--brd); border-radius: 20px;
+  padding: 2px 6px; font-size: 10px; color: #fff; display: flex; align-items: center; gap: 3px; cursor: pointer;
+}
+
+.msg-head { font-size: 11px; font-weight: 800; color: var(--txa); margin-bottom: 2px; }
+.msg-time { 
+  font-size: 10px; 
+  color: rgba(255,255,255,0.4); 
+  text-align: right; 
+  margin-top: 3px; 
+  width: 100%;
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+  <aside class="hero-sidebar" id="heroInner">
+    <div class="backdrop" id="heroBackdrop"></div>
+    <div class="gradient-overlay"></div>
+    <div class="hero-content">
+      <img class="hero-logo" id="heroLogo" alt="logo" src="" style="display:none">
+      <div id="heroTextTitleBox">
+        <div class="hero-kicker" id="heroKicker">TEMPORADA</div>
+        <h1 class="hero-title" id="heroTitle">The Xpedition</h1>
+      </div>
+      <p class="hero-meta" id="heroMeta">Season 1 • 2022</p>
+      <p class="hero-desc" id="heroDesc">Un destino extremo. Una expedición que lo cambió todo.</p>
+      <div class="hero-actions">
+        <button class="btn-cta" id="heroGo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <span id="heroGoText">Ir a la temporada</span>
+        </button>
+        <button class="btn-icon" id="heroFollow" title="Seguir">+</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <nav class="top-nav">
+      <div class="brand-logo" onclick="app.navigate('home')">THE <span>XPEDITION</span></div>
+      <div class="nav-links">
+        <a class="nav-item active" data-target="home">Inicio</a>
+        <a class="nav-item" data-target="explore">Explorar</a>
+        <a class="nav-item" data-target="mylist">Mi lista</a>
+        <a class="nav-item" data-target="about">Sobre el universo</a>
+      </div>
+      <div class="nav-actions">
+        <svg class="search-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" onclick="app.navigate('search')"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <div class="user-profile" id="userProfileBtn">?</div>
+        <div class="profile-dropdown" id="profileMenu">
+          <button id="menuLoginBtn">Iniciar sesión</button>
+          <div id="menuUserOptions" class="hidden">
+            <button id="menuMyProfileBtn">Ver mi perfil</button>
+            <button onclick="app.navigate('messages')">Ver mensajes</button>
+            <button id="menuEditNameBtn">Cambiar nombre</button>
+            <button id="menuEditIconBtn">Cambiar ícono</button>
+            <button id="menuEditPasswordBtn">Cambiar contraseña</button>
+            <hr>
+            <button id="menuLogoutBtn" style="color:#ff4444">Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="view-container">
+      <div id="view-home" class="view-section active">
+        <section class="row-container">
+          <h3 class="section-title">The Xpedition</h3>
+          <button class="nav-arrow left">‹</button>
+          <div class="track track-xpedition" id="track-xpedition"></div>
+          <button class="nav-arrow right">›</button>
+        </section>
+
+        <section class="row-container">
+          <h3 class="section-title">Campria</h3>
+          <button class="nav-arrow left">‹</button>
+          <div class="track track-campria" id="track-campria"></div>
+          <button class="nav-arrow right">›</button>
+        </section>
+
+        <section class="row-container">
+          <h3 class="section-title">Spin-Offs</h3>
+          <button class="nav-arrow left">‹</button>
+          <div class="track track-spinoff" id="track-spinoff"></div>
+          <button class="nav-arrow right">›</button>
+        </section>
+
+        <section class="row-container">
+          <h3 class="section-title">Simuladores</h3>
+          <button class="nav-arrow left">‹</button>
+          <div class="track track-sim" id="track-sim"></div>
+          <button class="nav-arrow right">›</button>
+        </section>
+      </div>
+
+      <div id="view-explore" class="view-section">
+        <p class="section-subtitle">El orden de estas listas no representan un ranking.</p>
+        <div id="explore-container"></div>
+      </div>
+
+      <div id="view-mylist" class="view-section">
+        <h3 class="section-title">Mi Lista y Guardados</h3>
+        <div class="grid-container" id="mylist-grid"></div>
+      </div>
+
+      <div id="view-about" class="view-section">
+        <div class="about-hero">
+          <h1>THE XPEDITION UNIVERSE</h1>
+          <p><strong>The Xpedition</strong> es una competencia virtual basada en diversos reality shows pero con un toque único, con el solo propósito de divertir a los participantes, fomentar la creatividad y crear comunidad entre otras cosas, con un formato más sólido y ligeros cambios en cada temporada.</p>
+          <p><strong>Campria</strong> es la primera saga, la cual cambiaba de formato en cada temporada, con nuevas reglas, nuevos sistemas de eliminaciones, nuevos participantes y caras reconocidas que regresaban al pasar los años.</p>
+          <p><strong>The Traitor</strong> es la última entrega, una mini saga basada en juegos de roles entre inocentes y traidores, con temporadas cortas y una dinámica más psicológica.</p>
+          <h3 class="section-title" style="justify-content:center;margin-top:60px;">El Equipo (Staff)</h3>
+          <div class="staff-grid" id="staff-grid">
+            <div class="staff-card"><div class="staff-icon staff-lazy" data-name="Dios"></div><p class="staff-name">Dios</p><span class="staff-role">Creador</span></div>
+            <div class="staff-card"><div class="staff-icon staff-lazy" data-name="Bonju"></div><p class="staff-name">Bonju Belluci</p><span class="staff-role">The Xpedition Host</span></div>
+            <div class="staff-card"><div class="staff-icon staff-lazy" data-name="Maria"></div><p class="staff-name">Maria Villegas</p><span class="staff-role">Campria Host</span></div>
+            <div class="staff-card"><div class="staff-icon staff-lazy" data-name="Dua Lingo"></div><p class="staff-name">Dua Lingo</p><span class="staff-role">Staff</span></div>
+            <div class="staff-card"><div class="staff-icon staff-lazy" data-name="Nidia Mirella"></div><p class="staff-name">Nidia Mirella</p><span class="staff-role">Ex-Concursante / Staff</span></div>
+            <div class="staff-card"><div class="staff-icon staff-lazy" data-name="Edna Droga"></div><p class="staff-name">Edna Droga</p><span class="staff-role">Juez</span></div>
+            <div class="staff-card"><div class="staff-icon staff-lazy" data-name="Nicki Gorilaj"></div><p class="staff-name">Nicki Gorilaj</p><span class="staff-role">Coach Musical</span></div>
+            <div class="staff-card"><div class="staff-icon staff-lazy" data-name="Chad Gil Pete"></div><p class="staff-name">Chad Gil Pete</p><span class="staff-role">Psicólogo</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-search" class="view-section">
+        <div class="search-header">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="searchInput" placeholder="Encuentra temporadas, juegos, participantes y perfiles..." autocomplete="off">
+        </div>
+        <h3 class="section-title" id="search-title">Títulos Populares</h3>
+        <div class="grid-container track-xpedition" id="search-grid"></div>
+      </div>
+
+      <div id="view-profile" class="view-section">
+        <h3 class="section-title">Perfil</h3>
+        <div id="profileContainer"></div>
+      </div>
+
+      <div id="view-messages" class="view-section">
+        <h3 class="section-title">Mensajes</h3>
+        <div class="chat-container">
+          <div class="chat-sidebar">
+            <div class="chat-header">
+              <span>Chats</span>
+              <div class="chat-header-actions">
+                <button id="btnNewChat" class="btn-icon-small" title="Nuevo Mensaje">+</button>
+                <button id="btnGroupOptions" class="btn-icon-small" title="Crear Grupo">⋮</button>
+              </div>
+            </div>
+            <div class="chat-list" id="chatContacts"></div>
+          </div>
+          <div class="chat-main">
+            <div class="chat-main-header">
+              <div class="chat-title-wrap">
+                <span id="chatActiveName">Selecciona un chat</span>
+                <span class="chat-subtitle" id="chatActiveMeta">Tus conversaciones se guardan en tu perfil</span>
+              </div>
+              <button id="btnActiveChatMenu" class="btn-icon-small hidden" title="Ajustes de Grupo">⋮</button>
+            </div>
+            <div class="chat-history" id="chatHistory"></div>
+            <div class="chat-input hidden" id="chatInputArea">
+              <input type="text" id="chatInput" placeholder="Escribe un mensaje...">
+              <button id="btnSendMsg" title="Enviar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="authModal">
+  <div class="auth-box">
+    <button class="auth-close" onclick="app.closeAuth()">×</button>
+    <h2 id="authTitle">Iniciar sesión</h2>
+    <p class="modal-note" id="authNote">Solo puedes entrar con personajes oficiales. La contraseña inicial es igual al usuario.</p>
+    <div id="authStep1">
+      <input type="text" id="authUsernameInput" placeholder="Nombre de usuario" class="auth-input" autocomplete="username">
+      <input type="password" id="authPasswordInput" placeholder="Contraseña" class="auth-input" autocomplete="current-password">
+      <button class="btn-cta" style="width:100%;margin-bottom:8px;" id="authSubmitBtn">Continuar</button>
+      <p class="modal-note" style="margin-top:6px;">Si el usuario existe, debes escribir su contraseña. Si no existe, no se puede crear una cuenta nueva.</p>
+    </div>
+    <div id="authStep2" class="hidden">
+      <div class="profile-topline">
+        <div>
+          <p class="modal-note" style="text-align:left;margin-bottom:8px;">Elige el ícono del perfil:</p>
+        </div>
+        <input type="text" id="avatarFilterInput" class="auth-input" placeholder="Buscar personaje..." style="max-width:260px;margin-bottom:0;">
+      </div>
+      <div class="avatar-grid" id="avatarSelectorGrid"></div>
+      <button class="auth-btn primary" id="confirmAvatarBtn">Guardar y entrar</button>
+      <button class="auth-btn secondary" id="backToLoginBtn">Volver</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="chatActionModal">
+  <div class="auth-box" id="chatActionBox">
+    <button class="auth-close" onclick="app.closeActionModal()">×</button>
+    <h2 id="chatActionTitle">Título</h2>
+    <p class="modal-note" id="chatActionNote" style="display:none;"></p>
+    <div id="chatActionContent"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="groupIconInput" accept="image/*" class="hidden">
+<script>
+const ROSTER = ["Adriana Pereira", "Alexandro", "Alexia", "Alice", "Amanda Lewis", "Anderson Moreno", "Andromeda", "Ari Salgado", "Atneimip", "Azael", "Azealia Midnight", "Bayron", "Beto", "Bonju", "Brave", "Bruno Macri", "Bryan Montalvo", "Carlos Harrington", "Catalina", "Christopher", "Cocomong", "Coronel", "Daelly", "Dani", "Daphne Blake", "Dios", "Doppel", "Dua Lingo", "Edna Droga", "Eduard", "Eduardo", "Elian", "Elvin", "Emanuel", "Emmy Mango", "Eris Midnight", "Esteban", "Felix", "Gabriel Sab", "Garnet", "Gokuh Moreno", "Greg", "Ian Esteban", "Ignacio Ricci", "Isabel", "Ivan Serrano", "Ivy", "Iñaella Rose", "Julián", "Katy", "Kim Camila", "Lalamila", "Leandro", "Lola Mugler", "Lucas Mendez", "Luciano", "Luis", "Marcos", "Maria", "Marianito", "Mary Hao", "Mati", "Nahuee", "Nicki Gorilaj", "Nidia Mirella", "Ocean Harmony", "Oscar", "Pablo", "Paula Garcia", "Paulis Queen", "Peggy", "Pepi", "Pier", "Plastique Doll", "Rafael", "Renata", "Renzo", "Robin", "Samuel Gamert", "Sandro", "Silvanya D'Lemberth", "Sophia Asdero", "Sophie Bradley", "Stalin Mango", "Vita", "Vitany Glambert", "Ximena", "Xina Ro"];
+const CONTENT = {"xpedition": [{"id": "antarctica", "name": "Antarctica", "meta": "Season 1 · 2022", "desc": "Un destino extremo. Una expedición que lo cambió todo.", "accent": "var(--txa)", "kind": "Temporada", "url": "https://thexpedition.github.io/The-Xpedition-Antarctica/", "actionLabel": "Ir a la temporada"}, {"id": "safari", "name": "Safari", "meta": "Season 2 · 2023 / 2025", "desc": "El instinto animal se despierta. Sobrevivir es la única regla.", "accent": "var(--txs)", "kind": "Temporada", "url": "https://thexpedition.github.io/The-Xpedition-Safari/", "actionLabel": "Ir a la temporada", "logo": "The Traitor Simulator Logo Color .png", "transparent": ""}, {"id": "japan", "name": "Japan", "meta": "Season 3 · Próximamente", "desc": "Honor, tradición y traición.", "accent": "var(--txj)", "kind": "Temporada", "url": null, "actionLabel": "Ir a la temporada", "disabled": true}], "campria": [{"id": "retroverse", "name": "Retroverse", "meta": "S1 · 2015", "season": "S1", "desc": "El inicio de una historia.", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}, {"id": "popular", "name": "Popular vs Fan", "meta": "S2 · 2016", "season": "S2", "desc": "Guerra de poder y egos.", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}, {"id": "comeback", "name": "Comeback", "meta": "S3 · 2016", "season": "S3", "desc": "En un viaje por todo el mundo, cualquier cosa puede pasar.", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}, {"id": "golden", "name": "Golden vs Platinum", "meta": "S4 · 2017", "season": "S4", "desc": "Duelo de jerarquías, guerra declarada.", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}, {"id": "money", "name": "Money Race", "meta": "S5 · 2017", "season": "S5", "desc": "1, 2 , 3 ¡Carrera por la victoria!", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}, {"id": "allstars", "name": "All Stars", "meta": "S6 · 2018", "season": "S6", "desc": "El reencuentro de las caras más destacadas de la saga.", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}, {"id": "elements", "name": "Elements", "meta": "S7 · 2019", "season": "S7", "desc": "Un reinicio prometido, reglas nuevas pero misma ambición.", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}, {"id": "andromeda", "name": "Andromeda", "meta": "S8 · 2019", "season": "S8", "desc": "El futuro es hoy, nuevas mecánicas de juego.", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}, {"id": "apocalypse", "name": "Apocalypse", "meta": "S9 · 2020", "season": "S9", "desc": "El fin que marcó todo, estelares, drama y twists en todos lados.", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}, {"id": "newera", "name": "New Era", "meta": "S10 · 2020", "season": "S10", "desc": "El reinicio de una saga, nuevas caras pero el mismo deseo por ganar.", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}, {"id": "empire", "name": "Empire of Blood", "meta": "S11 · 2021", "season": "S11", "desc": "Sangre nueva, ¿quien quedará con vida al final de la historia?", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}, {"id": "allstars2", "name": "All Stars 2", "meta": "S12 · 2021", "season": "S12", "desc": "Los estelares de las ultimas entregan se reencuentran por ultima vez para está caótica entrega.", "accent": "var(--c1)", "kind": "Campria", "url": null, "actionLabel": "Ir a la temporada"}], "spinoffs": [{"id": "traitor", "name": "The Traitor", "meta": "Season 1 · 2023", "desc": "Confianza y engaño.", "accent": "var(--tr)", "kind": "Spin Off", "url": "https://thexpedition.github.io/The-Traitor/", "actionLabel": "Ir a la temporada"}, {"id": "traitor2", "name": "The Traitor 2", "meta": "Season 2 · 2025", "desc": "Nuevos traidores, nuevas reglas.", "accent": "var(--tr)", "kind": "Spin Off", "url": null, "actionLabel": "Ir a la temporada", "disabled": true}], "simulators": [{"id": "simulator", "name": "Simulator", "meta": "Juego Interactivo", "desc": "Simula tus propias temporadas.", "accent": "var(--sim)", "kind": "Simulador", "url": "https://thexpedition.github.io/The-Xpedition-Simulator/", "actionLabel": "Jugar", "logo": "TXSimulator Logo Color .png", "transparent": "simulator"}, {"id": "showdown", "name": "Showdown", "meta": "Juego Interactivo", "desc": "Torneo de eliminación.", "accent": "var(--shw)", "kind": "Simulador", "url": "https://thexpedition.github.io/The-Xpedition-Showdown-Simulator/", "actionLabel": "Jugar"}, {"id": "traitorsim", "name": "The Traitor Simulator", "meta": "Juego Interactivo", "desc": "Experimenta la tensión y el drama causado por las mentiras.", "accent": "var(--tr)", "kind": "Simulador", "url": "https://thexpedition.github.io/The-Traitor-Simulator/", "actionLabel": "Jugar", "logo": "The Traitor Simulator Logo Color .png", "transparent": "traitorsim"}]};
+const CURRENT_DB_KEY = 'xpedition_db_v4';
+const CURRENT_SESSION_KEY = 'xpedition_session_v4';
+const VISITOR_KEY = 'xpedition_visitor_id_v1';
+const VISITOR_FOLLOWS_KEY = 'xpedition_visitor_follows_v1';
+const BROADCAST_NAME = 'xpedition_sync_v4';
+const REACTIONS = [
+  { emoji: '👍', label: 'like' },
+  { emoji: '👎', label: 'dislike' },
+  { emoji: '😂', label: 'divierte' },
+  { emoji: '😡', label: 'enoja' },
+  { emoji: '😢', label: 'entristece' },
+  { emoji: '💩', label: 'popo' },
+  { emoji: '🤮', label: 'vomito' },
+  { emoji: '❓', label: '?' }
+];
+
+function normalizeName(v){ return String(v || '').trim().replace(/\s+/g,' '); }
+function keyOf(v){ return normalizeName(v).toLowerCase(); }
+function slug(v){ return normalizeName(v).toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/ñ/g,'n').replace(/[^a-z0-9]+/g,''); }
+function escapeHTML(str){ return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
+function getColor(str){ let h=0; for(let i=0;i<str.length;i++) h=str.charCodeAt(i)+((h<<5)-h); const c=(h & 0x00FFFFFF).toString(16).toUpperCase(); return '#' + '00000'.substring(0,6-c.length) + c; }
+function nowId(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+function clone(v){ return JSON.parse(JSON.stringify(v)); }
+function unique(arr){ return [...new Set(arr)]; }
+function avatarOf(name){ return { id: 'char-' + name, name, isChar:true }; }
+
+function defaultStats(){ return { followers:0, seasonsPlayed:0, duelWins:0, duelLosses:0, finalsReached:0, seasonsWon:0, bestPlacement:0 }; }
+function defaultProfile(name){
+  return {
+    name,
+    password: name,
+    avatar: name,
+    stats: defaultStats(),
+    bio: `Perfil oficial de ${name}.`,
+    followers: [],
+    following: [],
+    notifications: [],
+    chats: {},
+    saved: [],
+    createdGroups: []
+  };
+}
+
+function makeDmId(a,b){ return ['dm', keyOf(a), keyOf(b)].sort().join(':'); }
+function makeGroupId(name){ return 'group:' + slug(name); }
+function membersToNames(members){ return members.map(m => typeof m === 'string' ? m : m.name); }
+function memberRole(conv, name){
+  if(!conv || conv.type !== 'group') return 'user';
+  const m = conv.members.find(x => keyOf(x.name) === keyOf(name));
+  return m ? (m.role || 'user') : 'user';
+}
+function getVisitorId(){
+  let id = localStorage.getItem(VISITOR_KEY);
+  if(!id){ id = 'visitor_' + nowId(); localStorage.setItem(VISITOR_KEY, id); }
+  return id;
+}
+function getVisitorFollowSet(){
+  try { return new Set(JSON.parse(localStorage.getItem(VISITOR_FOLLOWS_KEY) || '[]')); } catch { return new Set(); }
+}
+function saveVisitorFollowSet(set){
+  localStorage.setItem(VISITOR_FOLLOWS_KEY, JSON.stringify([...set]));
+}
+function currentActorId(app){
+  return app.state.user ? `user:${keyOf(app.state.user.name)}` : `visitor:${getVisitorId()}`;
+}
+function getVisitorDisplayName(app){
+  return app.state.user ? app.state.user.name : 'Invitado';
+}
+
+function loadFallbackImage(imgElement, item, isBgOrAvatar = false) {
+  if (!imgElement || !item) return;
+
+  const nameClean = (item.name || '').toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/ñ/g, 'n').replace(/[^a-z0-9]+/g, '');
+  const idSlug = (item.id || '').toLowerCase();
+  let candidates = [];
+  const exts = ['png', 'jpg', 'jpeg', 'webp'];
+
+  if (item.isChar) {
+    exts.forEach(e => candidates.push(`personajes/${nameClean}.${e}`));
+  } else if (isBgOrAvatar) {
+    if (idSlug === 'traitorsim') {
+      candidates.push('The Traitor Simulator Logo Color .png');
+      candidates.push('logos/The Traitor Simulator Logo Color .png');
+    }
+    if (item.logo) candidates.push(item.logo, `logos/${item.logo}`);
+    if (item.season) {
+      exts.forEach(e => candidates.push(`${item.season} Portada.${e}`));
+      exts.forEach(e => candidates.push(`logos/${item.season} Portada.${e}`));
+    }
+    exts.forEach(e => candidates.push(`backdrops/${idSlug}.${e}`));
+    exts.forEach(e => candidates.push(`logos/TX${idSlug.charAt(0).toUpperCase()} Logo Color.png`));
+  } else {
+    if (item.logo) candidates.push(item.logo, `logos/${item.logo}`);
+    if (item.transparent) exts.forEach(e => candidates.push(`transparent/${item.transparent}.${e}`));
+    exts.forEach(e => candidates.push(`transparent/${idSlug}.${e}`));
+    exts.forEach(e => candidates.push(`transparent/${nameClean}.${e}`));
+    exts.forEach(e => candidates.push(`logos/${idSlug}.${e}`));
+  }
+
+  let i = 0;
+  function next() {
+    if (i >= candidates.length) return;
+    const test = new Image();
+    test.onload = () => {
+      if (imgElement.tagName === 'DIV') {
+        imgElement.style.backgroundImage = `url('${test.src}')`;
+        imgElement.style.backgroundSize = 'cover';
+        imgElement.style.backgroundPosition = 'center center';
+        imgElement.style.backgroundRepeat = 'no-repeat';
+        if (imgElement.classList.contains('user-profile')) {
+          imgElement.textContent = '';
+        }
+      } else {
+        imgElement.src = test.src;
+        imgElement.style.display = 'block';
+      }
+      const fallbackText = imgElement.parentElement ? imgElement.parentElement.querySelector('.fallback-title') : null;
+      if (fallbackText) fallbackText.style.display = 'none';
+    };
+    test.onerror = () => { i++; next(); };
+    test.src = candidates[i];
+  }
+  next();
+}
+
+function buildSeedDB(){
+  const profiles = {};
+  ROSTER.forEach(name => profiles[name] = defaultProfile(name));
+
+  // seed group chats / dm placeholders by user on first login
+  return {
+    version: 4,
+    profiles,
+    conversations: {},
+    settings: { remoteMode: 'local', firebaseConfigured: false, supabaseConfigured: false }
+  };
+}
+
+const app = {
+  state: {
+    view: 'home',
+    currentCard: null,
+    currentProfile: null,
+    user: null,
+    userKey: null,
+    db: buildSeedDB(),
+    authMode: 'login',
+    authStep: 1,
+    pendingAvatar: null,
+    activeChat: null,
+    activeChatDraft: '',
+    visitorFollowSet: getVisitorFollowSet(),
+    modalType: null,
+    groupModalMode: null,
+    groupModalChatId: null,
+    profileFilter: '',
+    messageFilter: '',
+    broadcast: null
+  },
+
+  init(){
+    this.loadState();
+    this.ensureRoster();
+    this.setupRealtime();
+    this.renderAll();
+    this.navigate('home');
+    this.updateAuthUI();
+    this.showNotificationsForCurrentUser();
+  },
+
+  loadState(){
+    try{
+      const raw = localStorage.getItem(CURRENT_DB_KEY);
+      if(raw){
+        this.state.db = JSON.parse(raw);
+      } else {
+        this.state.db = buildSeedDB();
+      }
+    }catch{
+      this.state.db = buildSeedDB();
+    }
+
+    const session = localStorage.getItem(CURRENT_SESSION_KEY);
+    if(session && this.state.db.profiles[session]){
+      this.state.userKey = session;
+      this.state.user = this.state.db.profiles[session];
+    } else {
+      this.state.user = null;
+      this.state.userKey = null;
+    }
+  },
+
+  saveState(broadcast=true){
+    if(this.state.userKey && this.state.user){
+      this.state.db.profiles[this.state.userKey] = this.state.user;
+      localStorage.setItem(CURRENT_SESSION_KEY, this.state.userKey);
+    } else {
+      localStorage.removeItem(CURRENT_SESSION_KEY);
+    }
+    localStorage.setItem(CURRENT_DB_KEY, JSON.stringify(this.state.db));
+    if(broadcast && this.state.broadcast){
+      this.state.broadcast.postMessage({ type:'sync', ts: Date.now() });
+    }
+  },
+
+  ensureRoster(){
+    ROSTER.forEach(name => {
+      if(!this.state.db.profiles[name]) this.state.db.profiles[name] = defaultProfile(name);
+      const p = this.state.db.profiles[name];
+      if(!p.password) p.password = name;
+      if(!p.avatar) p.avatar = name;
+      if(!p.stats) p.stats = defaultStats();
+      if(typeof p.stats.followers !== 'number') p.stats.followers = 0;
+      if(!Array.isArray(p.followers)) p.followers = [];
+      if(!Array.isArray(p.following)) p.following = [];
+      if(!Array.isArray(p.notifications)) p.notifications = [];
+      if(!Array.isArray(p.saved)) p.saved = [];
+      if(!Array.isArray(p.createdGroups)) p.createdGroups = [];
+      if(!p.bio) p.bio = `Perfil oficial de ${name}.`;
+    });
+    this.saveState(false);
+  },
+
+  setupRealtime(){
+    if('BroadcastChannel' in window){
+      this.state.broadcast = new BroadcastChannel(BROADCAST_NAME);
+      this.state.broadcast.onmessage = (ev) => {
+        if(ev.data && ev.data.type === 'sync'){
+          this.reloadFromStorage();
+        }
+      };
+    }
+    window.addEventListener('storage', (e) => {
+      if(e.key === CURRENT_DB_KEY || e.key === CURRENT_SESSION_KEY){
+        this.reloadFromStorage();
+      }
+    });
+  },
+
+  reloadFromStorage(){
+    const currentView = this.state.view;
+    const currentChat = this.state.activeChat;
+    const currentProfile = this.state.currentProfile;
+    this.loadState();
+    this.ensureRoster();
+    if(currentView === 'messages') this.renderChats();
+    if(currentView === 'profile' && currentProfile) this.renderProfile(currentProfile);
+    if(currentView === 'mylist') this.renderMyList();
+    this.updateAuthUI();
+    if(currentChat && currentView === 'messages') this.openChatById(currentChat, false);
+  },
+
+  renderAll(){
+    this.renderHome();
+    this.renderExplore();
+    this.renderStaff();
+  },
+
+  navigate(view){
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+    const target = document.getElementById(`view-${view}`);
+    if(target) target.classList.add('active');
+
+    const link = document.querySelector(`.nav-item[data-target="${view}"]`);
+    if(link) link.classList.add('active');
+
+    this.state.view = view;
+    if(view === 'search'){
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      this.doSearch('');
+      setTimeout(() => input.focus(), 40);
+    }
+    if(view === 'mylist') this.renderMyList();
+    if(view === 'messages') this.renderChats();
+    if(view === 'profile' && this.state.currentProfile) this.renderProfile(this.state.currentProfile);
+    document.getElementById('profileMenu').classList.remove('show');
+  },
+
+  openCard(card){
+    this.state.currentCard = card;
+    document.getElementById('heroKicker').textContent = card.kind || 'TEMPORADA';
+    document.getElementById('heroTitle').textContent = card.name;
+    document.getElementById('heroMeta').textContent = card.meta || '';
+    document.getElementById('heroDesc').textContent = card.desc || '';
+    document.documentElement.style.setProperty('--accent', card.accent || getColor(card.name));
+    const heroBackdrop = document.getElementById('heroBackdrop');
+    const heroLogo = document.getElementById('heroLogo');
+    const heroTitleBox = document.getElementById('heroTextTitleBox');
+    loadFallbackImage(heroBackdrop, card, true);
+    if(card.kind === 'Campria'){
+      heroLogo.style.display = 'none';
+      heroTitleBox.style.display = 'block';
+    } else if(card.isChar || card.kind === 'Perfil'){
+      heroLogo.style.display = 'none';
+      heroTitleBox.style.display = 'block';
+    } else {
+      heroLogo.style.display = 'none';
+      loadFallbackImage(heroLogo, card, false);
+    }
+
+    const saved = this.isSaved(card.id);
+    const followBtn = document.getElementById('heroFollow');
+    const heroGo = document.getElementById('heroGoText');
+
+    if(card.isChar || card.kind === 'Perfil'){
+      heroGo.textContent = 'Ir al perfil';
+      followBtn.style.display = 'block';
+      followBtn.textContent = this.hasFollowed(card.name) ? '✓' : '+';
+      followBtn.title = this.hasFollowed(card.name) ? 'Siguiendo' : 'Seguir';
+      followBtn.classList.toggle('active', this.hasFollowed(card.name));
+    } else {
+      followBtn.style.display = 'none';
+      heroGo.textContent = card.actionLabel || (card.kind === 'Simulador' ? 'Jugar' : 'Ir a la temporada');
+    }
+
+    const hero = document.getElementById('heroInner');
+    hero.classList.remove('hero-anim');
+    void hero.offsetWidth;
+    hero.classList.add('hero-anim');
+    this.state.currentCard = card;
+  },
+
+  heroAction(){
+    const card = this.state.currentCard;
+    if(!card) return;
+    if(card.isChar || card.kind === 'Perfil'){
+      this.openProfile(card.name);
+      return;
+    }
+    if(card.disabled || !card.url){
+      this.toast('Esta página todavía no tiene enlace.', 'info');
+      return;
+    }
+    window.open(card.url, '_blank', 'noopener');
+  },
+
+  isSaved(id){
+    return !!(this.state.user && this.state.user.saved && this.state.user.saved.includes(id));
+  },
+
+  toggleSave(){
+    if(!this.state.user){
+      this.openAuth();
+      return;
+    }
+    const id = this.state.currentCard ? this.state.currentCard.id : null;
+    if(!id) return;
+    const arr = this.state.user.saved || (this.state.user.saved = []);
+    const idx = arr.indexOf(id);
+    if(idx > -1) arr.splice(idx, 1); else arr.push(id);
+    this.saveState();
+    if(this.state.view === 'mylist') this.renderMyList();
+    this.updateAuthUI();
+    if(this.state.currentCard) this.openCard(this.state.currentCard);
+  },
+
+  renderCard(item, circle=false){
+    const safe = JSON.stringify(item).replace(/"/g, '&quot;');
+    if(circle){
+      return `
+        <div class="explore-wrapper">
+          <div class="card" data-item="${safe}" data-id="char-${escapeHTML(item.name)}" data-ischar="true" style="--accent-current:${item.accent || getColor(item.name)}">
+            <div class="card-bg-layer" style="background-color:#2b3242"></div>
+          </div>
+          <p class="explore-name">${escapeHTML(item.name)}</p>
+        </div>
+      `;
+    }
+    if(item.kind === 'Campria'){
+      return `
+        <div class="card" data-item="${safe}" data-id="${escapeHTML(item.id)}" data-ischar="false" style="--accent-current:${item.accent || 'var(--c1)'}">
+          <div class="card-bg-layer"></div>
+          <div class="card-gradient"></div>
+          <h2 class="fallback-title">${escapeHTML(item.name)}</h2>
+        </div>
+      `;
+    }
+    return `
+      <div class="card" data-item="${safe}" data-id="${escapeHTML(item.id)}" data-ischar="${item.isChar ? 'true' : 'false'}" style="--accent-current:${item.accent || '#fff'}">
+        <div class="card-bg-layer"></div>
+        <div class="card-gradient"></div>
+        <img class="logo card-lazy-logo" alt="${escapeHTML(item.name)}" style="display:none">
+        <h2 class="fallback-title">${escapeHTML(item.name)}</h2>
+        <div class="card-info">
+          <p class="name">${escapeHTML(item.name)}</p>
+          <p class="meta">${escapeHTML(item.meta || '')}</p>
+        </div>
+      </div>
+    `;
+  },
+
+  processCardImages(container, explore=false){
+    container.querySelectorAll('.card').forEach(card => {
+      const item = JSON.parse(card.dataset.item);
+      const bg = card.querySelector('.card-bg-layer');
+      loadFallbackImage(bg, item, true);
+      const logo = card.querySelector('.card-lazy-logo');
+      if(logo && !explore && item.kind !== 'Campria') loadFallbackImage(logo, item, false);
+    });
+  },
+
+  attachCardEvents(container){
+    container.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        const item = JSON.parse(card.dataset.item);
+        this.openCard(item);
+      });
+      card.addEventListener('click', () => {
+        const item = JSON.parse(card.dataset.item);
+        this.openCard(item);
+        window.scrollTo({ top:0, behavior:'smooth' });
+      });
+    });
+  },
+
+  renderHome(){
+    const xp = CONTENT.xpedition.map(i => this.renderCard(i)).join('');
+    const cp = CONTENT.campria.map(i => this.renderCard(i)).join('');
+    const sp = CONTENT.spinoffs.map(i => this.renderCard(i)).join('');
+    const sm = CONTENT.simulators.map(i => this.renderCard(i)).join('');
+    document.getElementById('track-xpedition').innerHTML = xp;
+    document.getElementById('track-campria').innerHTML = cp;
+    document.getElementById('track-spinoff').innerHTML = sp;
+    document.getElementById('track-sim').innerHTML = sm;
+    this.processCardImages(document.getElementById('view-home'));
+    this.attachCardEvents(document.getElementById('view-home'));
+  },
+
+  renderExplore(){
+    const container = document.getElementById('explore-container');
+    const lists = [
+      { title:'TOP 5 Temporadas', items:['antarctica','safari','apocalypse','all stars','comeback'] },
+      { title:'TOP 5 Ganadores', items:['Luis','Plastique Doll','Dani','Felix','Nahuee'] },
+      { title:'TOP 5 Finalistas', items:['Andromeda','Alexandro','Robin','Katy','Pepi'] },
+      { title:'TOP 10 Titanes de Eliminación', items:['Isabel','Peggy','Pablo','Marcos','Pier','Bryan Montalvo','Julián','Eris Midnight','Coronel','Vita'] },
+      { title:'TOP 5 Fan Favorites', items:['Renzo','Ximena','Eduardo','Iñaella Rose','Mati'] },
+      { title:'TOP 5 Estrategas', items:['Coronel','Dani','Alexandro','Julián','Ignacio Ricci'] },
+      { title:'TOP 5 Arcos de Redención', items:['Beto','Daelly','Pier','Oscar','Ivy'] },
+      { title:'TOP 5 Iconos de Campria', items:['Luciano','Luis','Felix','Plastique Doll','Nahuee'] },
+      { title:'TOP 5 Iconos de Xpedition', items:['Isabel','Andromeda','Peggy','Iñaella Rose','Dani'] },
+      { title:'TOP 5 Iconos de The Traitor', items:['Xina Ro','Isabel','Renata','Daelly','Stalin Mango'] },
+      { title:'TOP 5 Inolvidables', items:['Catalina','Iñaella Rose','Lalamila','Daphne Blake','Bayron'] }
+    ];
+    container.innerHTML = lists.map(list => {
+      const isSeason = list.title.toLowerCase().includes('temporada');
+      const itemsData = list.items.map(name => {
+        if(isSeason){
+          const found = this.findContentByName(name);
+          return found || { id:'char-'+name, name, isChar:true, meta:'Participante', kind:'Perfil', accent:getColor(name) };
+        }
+        return { id:'char-'+name, name, isChar:true, meta:'Participante', kind:'Perfil', accent:getColor(name) };
+      });
+      return `
+        <div class="row-container">
+          <h3 class="section-title">${escapeHTML(list.title)}</h3>
+          <button class="nav-arrow left">‹</button>
+          <div class="track">
+            ${itemsData.map(d => this.renderCard(d, true)).join('')}
+          </div>
+          <button class="nav-arrow right">›</button>
+        </div>
+      `;
+    }).join('');
+    this.processCardImages(container, true);
+    this.attachCardEvents(container);
+  },
+
+  renderMyList(){
+    const grid = document.getElementById('mylist-grid');
+    if(!this.state.user || !Array.isArray(this.state.user.saved) || !this.state.user.saved.length){
+      grid.innerHTML = '<p style="color:var(--muted);width:100%;grid-column:1/-1;">No tienes elementos guardados.</p>';
+      return;
+    }
+    const items = this.state.user.saved.map(id => {
+      if(id.startsWith('char-')){
+        const name = id.replace('char-','');
+        return { id, name, isChar:true, meta:'Participante', kind:'Perfil', accent:getColor(name) };
+      }
+      return this.findContentById(id) || { id, name:id, meta:'', kind:'Perfil', isChar:true, accent:getColor(id) };
+    });
+    grid.innerHTML = items.map(d => this.renderCard(d)).join('');
+    this.processCardImages(grid, false);
+    this.attachCardEvents(grid);
+  },
+
+  renderStaff(){
+    document.querySelectorAll('.staff-lazy').forEach(div => {
+      loadFallbackImage(div, { name:div.dataset.name, isChar:true }, true);
+    });
+  },
+
+  findContentById(id){
+    for(const category of Object.keys(CONTENT)){
+      const found = CONTENT[category].find(x => x.id === id);
+      if(found) return found;
+    }
+    return null;
+  },
+
+  findContentByName(name){
+    const target = normalizeName(name).toLowerCase();
+    for(const category of Object.keys(CONTENT)){
+      const found = CONTENT[category].find(x => x.name.toLowerCase() === target);
+      if(found) return found;
+    }
+    return null;
+  },
+
+  allCards(){
+    return [...CONTENT.xpedition, ...CONTENT.campria, ...CONTENT.spinoffs, ...CONTENT.simulators];
+  },
+
+  doSearch(query){
+    const q = normalizeName(query).toLowerCase();
+    const grid = document.getElementById('search-grid');
+    if(!q){
+      document.getElementById('search-title').textContent = 'Títulos Populares';
+      const popular = [
+        this.findContentById('traitorsim'),
+        this.findContentById('antarctica'),
+        this.findContentById('allstars'),
+        this.findContentById('traitor')
+      ].filter(Boolean);
+      grid.innerHTML = popular.map(d => this.renderCard(d)).join('');
+      this.processCardImages(grid, false);
+      this.attachCardEvents(grid);
+      return;
+    }
+
+    document.getElementById('search-title').textContent = `Resultados para "${escapeHTML(query)}"`;
+    const contentMatches = this.allCards().filter(c => (c.name || '').toLowerCase().includes(q) || (c.kind || '').toLowerCase().includes(q));
+    const profileMatches = ROlSTER_SEARCH(q);
+    const combined = [...contentMatches, ...profileMatches];
+    const seen = new Set();
+    const dedup = combined.filter(item => {
+      const key = item.isChar ? item.id : item.id;
+      if(seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    if(!dedup.length){
+      grid.innerHTML = '<p style="grid-column:1/-1;color:var(--muted);">No se encontraron resultados.</p>';
+      return;
+    }
+    grid.innerHTML = dedup.map(d => this.renderCard(d, false)).join('');
+    this.processCardImages(grid, false);
+    this.attachCardEvents(grid);
+  },
+
+  updateAuthUI(){
+    const btn = document.getElementById('userProfileBtn');
+    const loginBtn = document.getElementById('menuLoginBtn');
+    const userOpts = document.getElementById('menuUserOptions');
+
+    if(this.state.user){
+      loadFallbackImage(btn, { name:this.state.user.avatar || this.state.user.name, isChar:true }, true);
+      loginBtn.classList.add('hidden');
+      userOpts.classList.remove('hidden');
+    } else {
+      btn.style.backgroundImage = 'none';
+      btn.innerHTML = '?';
+      loginBtn.classList.remove('hidden');
+      userOpts.classList.add('hidden');
+    }
+  },
+
+  openAuth(editingIcon=false){
+    this.state.authMode = 'login';
+    this.state.authStep = 1;
+    this.state.pendingAvatar = null;
+    this.state.editingIcon = editingIcon;
+
+    document.getElementById('authModal').classList.add('active');
+    document.getElementById('authTitle').textContent = editingIcon ? 'Cambiar ícono' : 'Iniciar sesión';
+    document.getElementById('authNote').textContent = editingIcon ? 'Selecciona un personaje para cambiar el ícono de tu perfil.' : 'Solo puedes entrar con personajes oficiales. La contraseña inicial es igual al usuario.';
+    document.getElementById('authStep1').classList.remove('hidden');
+    document.getElementById('authStep2').classList.add('hidden');
+    document.getElementById('authUsernameInput').value = '';
+    document.getElementById('authPasswordInput').value = '';
+    document.getElementById('avatarFilterInput').value = '';
+    this.renderAvatarPicker();
+    document.getElementById('profileMenu').classList.remove('show');
+  },
+
+  closeAuth(){ document.getElementById('authModal').classList.remove('active'); },
+  closeActionModal(){ document.getElementById('chatActionModal').classList.remove('active'); },
+
+  renderAvatarPicker(){
+    const q = normalizeName(document.getElementById('avatarFilterInput').value || '').toLowerCase();
+    const grid = document.getElementById('avatarSelectorGrid');
+    const list = ROASTER_FILTER(q);
+    grid.innerHTML = list.map(name => `<div class="avatar-choice ${this.state.pendingAvatar===name ? 'selected':''}" title="${escapeHTML(name)}" data-name="${escapeHTML(name)}"></div>`).join('');
+    grid.querySelectorAll('.avatar-choice').forEach(el => {
+      const name = el.dataset.name;
+      el.addEventListener('click', () => {
+        this.state.pendingAvatar = name;
+        grid.querySelectorAll('.avatar-choice').forEach(x => x.classList.remove('selected'));
+        el.classList.add('selected');
+      });
+      loadFallbackImage(el, { name, isChar:true }, true);
+    });
+  },
+
+  attemptLogin(){
+    const username = normalizeName(document.getElementById('authUsernameInput').value);
+    const password = document.getElementById('authPasswordInput').value;
+    if(!username){
+      this.toast('Escribe un usuario.', 'error');
+      return;
+    }
+    const profile = this.state.db.profiles[username];
+    if(!profile){
+      this.toast('Usuario no encontrado.', 'error');
+      return;
+    }
+    if(password !== profile.password){
+      this.toast('Contraseña incorrecta.', 'error');
+      return;
+    }
+
+    this.state.userKey = username;
+    this.state.user = profile;
+    if(!profile.avatar) profile.avatar = username;
+    this.ensurePersonalChats(username);
+    this.saveState();
+    this.updateAuthUI();
+    this.toast(`Bienvenido, ${username}.`, 'success');
+    document.getElementById('authStep1').classList.add('hidden');
+    document.getElementById('authStep2').classList.remove('hidden');
+    document.getElementById('authTitle').textContent = 'Elige tu ícono';
+    document.getElementById('authNote').textContent = 'Puedes cambiarlo cuando quieras dentro de la app.';
+    this.renderAvatarPicker();
+    if(this.state.user.notifications && this.state.user.notifications.length){
+      this.state.user.notifications.forEach(msg => this.toast(msg, 'success'));
+      this.state.user.notifications = [];
+      this.saveState();
+    }
+  },
+
+  finishLoginWithAvatar(){
+    const avatar = this.state.pendingAvatar || this.state.user.name;
+    this.state.user.avatar = avatar;
+    this.saveState();
+    this.updateAuthUI();
+    this.closeAuth();
+    this.navigate('home');
+  },
+
+  ensurePersonalChats(username){
+    const defaultContacts = ['Bonju', 'Dios', 'Dua Lingo'];
+    defaultContacts.forEach(contact => {
+      const conv = this.getOrCreateDm(username, contact, true);
+      if(conv.messages.length === 0){
+        conv.messages.push({
+          id: nowId(),
+          from: contact,
+          text: contact === 'Bonju' ? 'Bienvenido a la página oficial de The Xpedition, próximamente habrá más noticias' : contact === 'Dios' ? 'Hola, te doy el privilegio de hablar conmigo.' : 'Pio Pio',
+          ts: Date.now(),
+          reactions: {},
+          fromAvatar: contact
+        });
+      }
+    });
+    this.saveState();
+  },
+
+  logout(){
+    this.state.user = null;
+    this.state.userKey = null;
+    localStorage.removeItem(CURRENT_SESSION_KEY);
+    this.updateAuthUI();
+    document.getElementById('profileMenu').classList.remove('show');
+    if(this.state.view === 'messages' || this.state.view === 'profile' || this.state.view === 'mylist') this.navigate('home');
+    this.toast('Sesión cerrada.', 'info');
+  },
+
+  goToHeroProfileOrLink(){
+    this.heroAction();
+  },
+
+  hasFollowed(name){
+    const id = keyOf(name);
+    if(this.state.user){
+      return (this.state.user.following || []).includes(id);
+    }
+    return this.state.visitorFollowSet.has(id);
+  },
+
+  toggleFollow(name){
+    const p = this.state.db.profiles[name];
+    if(!p) return;
+    const actor = currentActorId(this);
+    const profileId = keyOf(name);
+    const isFollowing = this.hasFollowed(name);
+
+    if(this.state.user){
+      this.state.user.following = this.state.user.following || [];
+      const idx = this.state.user.following.indexOf(profileId);
+      if(idx > -1){
+        this.state.user.following.splice(idx,1);
+        p.followers = p.followers.filter(x => x !== actor);
+      } else {
+        this.state.user.following.push(profileId);
+        if(!p.followers.includes(actor)) p.followers.push(actor);
+      }
+    } else {
+      const set = this.state.visitorFollowSet;
+      if(set.has(profileId)){
+        set.delete(profileId);
+        p.followers = p.followers.filter(x => x !== actor);
+      } else {
+        set.add(profileId);
+        if(!p.followers.includes(actor)) p.followers.push(actor);
+      }
+      saveVisitorFollowSet(set);
+    }
+
+    p.stats.followers = p.followers.length;
+    this.saveState();
+    if(this.state.currentProfile) this.renderProfile(this.state.currentProfile);
+    if(this.state.currentCard && (keyOf(this.state.currentCard.name) === profileId || keyOf(this.state.currentCard.id) === profileId)){
+      this.openCard(this.state.currentCard);
+    }
+    this.toast(isFollowing ? 'Dejaste de seguir.' : 'Seguimiento agregado.', 'success');
+  },
+
+  openProfile(name){
+    if(!this.state.db.profiles[name]) return this.toast('Perfil no encontrado.', 'error');
+    this.state.currentProfile = name;
+    this.navigate('profile');
+    this.renderProfile(name);
+  },
+
+  renderProfile(name){
+    const p = this.state.db.profiles[name];
+    if(!p) return;
+    const isOwn = this.state.user && keyOf(this.state.user.name) === keyOf(name);
+    const followed = this.hasFollowed(name);
+    p.stats.followers = p.followers.length;
+
+    const html = `
+      <div class="profile-view">
+        <div class="profile-portrait">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="profile-name">${escapeHTML(p.name)}</div>
+          <div class="profile-sub">${isOwn ? 'Tu perfil oficial' : 'Perfil oficial del universo'}</div>
+          <div class="badge-row">
+            <span class="badge">👥 ${p.stats.followers} seguidores</span>
+            <span class="badge">🎭 ${p.stats.seasonsPlayed} temporadas</span>
+          </div>
+          <div class="profile-follow-row">
+            <button class="auth-btn primary" id="profileFollowBtn">${followed ? 'Siguiendo' : 'Seguir'}</button>
+            ${isOwn ? '<button class="auth-btn secondary" id="profileAvatarBtn">Cambiar ícono</button>' : ''}
+          </div>
+          ${isOwn ? '<button class="auth-btn secondary" id="profilePasswordBtn">Cambiar contraseña</button><button class="auth-btn secondary" id="profileStatsBtn">Editar Biografía</button>' : ''}
+        </div>
+        <div class="profile-panel">
+          <div class="profile-topline">
+            <div>
+              <div class="section-title" style="margin:0;">Stats del perfil</div>
+              <div class="modal-note" style="text-align:left;margin:6px 0 0;">Las estadísticas solo son basadas en las temporadas de The Xpedition.</div>
+            </div>
+            <div class="badge-row">
+              <span class="badge">🏅 Mejor posición: ${p.stats.bestPlacement}</span>
+              <span class="badge">👑 Ganadas: ${p.stats.seasonsWon}</span>
+            </div>
+          </div>
+          <div class="profile-stats-grid">
+            ${this.statCard('👥 Seguidores', p.stats.followers)}
+            ${this.statCard('🎭 Temporadas jugadas', p.stats.seasonsPlayed)}
+            ${this.statCard('🏆 Victorias en duelos', p.stats.duelWins)}
+            ${this.statCard('❌ Derrotas en duelos', p.stats.duelLosses)}
+            ${this.statCard('🥇 Finales alcanzadas', p.stats.finalsReached)}
+            ${this.statCard('👑 Temporadas ganadas', p.stats.seasonsWon)}
+            ${this.statCard('🏅 Mejor posición', p.stats.bestPlacement)}
+          </div>
+          <div class="profile-notes">
+            <h3>Biografía</h3>
+            <p>${escapeHTML(p.bio || 'Sin biografía todavía.')}</p>
+          </div>
+          <div class="profile-notes">
+            <h3>Logros rápidos</h3>
+            <div class="badge-row">
+              ${p.stats.seasonsWon > 0 ? '<span class="badge">👑 Campeón/a</span>' : ''}
+              ${p.stats.duelWins > 0 ? '<span class="badge">⚔️ Competidor/a</span>' : ''}
+              ${p.stats.finalsReached > 0 ? '<span class="badge">⭐ Finalista</span>' : ''}
+              ${p.stats.followers > 0 ? '<span class="badge">🌟 Popular</span>' : ''}
+              ${p.stats.bestPlacement && p.stats.bestPlacement <= 3 ? '<span class="badge">🥉 Top 3</span>' : ''}
+              ${(!p.stats.seasonsWon && !p.stats.duelWins && !p.stats.finalsReached && !p.stats.followers) ? '<span class="badge">Nuev@ en el universo</span>' : ''}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.getElementById('profileContainer').innerHTML = html;
+    const avatar = document.getElementById('profileAvatar');
+    loadFallbackImage(avatar, { name:p.avatar || p.name, isChar:true }, true);
+    document.getElementById('profileFollowBtn').onclick = () => this.toggleFollow(name);
+    if(isOwn){
+      document.getElementById('profileAvatarBtn').onclick = () => this.openAuth(true);
+      document.getElementById('profilePasswordBtn').onclick = () => this.openPasswordEditor(name);
+      document.getElementById('profileStatsBtn').onclick = () => this.openStatsEditor(name);
+    }
+  },
+
+  statCard(label, value){
+    return `<div class="stat-card"><div class="label">${escapeHTML(label)}</div><div class="value">${escapeHTML(String(value))}</div></div>`;
+  },
+
+  openPasswordEditor(name){
+    const p = this.state.db.profiles[name];
+    if(!p) return;
+    this.openActionModal('Cambiar contraseña', `
+      <p class="modal-note">La nueva contraseña reemplazará la actual. Quedará guardada en la base de datos local y en la sincronización de pestañas.</p>
+      <input type="password" id="oldPass" class="auth-input" placeholder="Contraseña actual">
+      <input type="password" id="newPass" class="auth-input" placeholder="Nueva contraseña">
+      <input type="password" id="newPass2" class="auth-input" placeholder="Repetir nueva contraseña">
+      <button class="auth-btn primary" id="savePassBtn">Guardar contraseña</button>
+    `, () => {
+      document.getElementById('savePassBtn').onclick = () => {
+        const oldPass = document.getElementById('oldPass').value;
+        const newPass = document.getElementById('newPass').value;
+        const newPass2 = document.getElementById('newPass2').value;
+        if(oldPass !== p.password) return this.toast('La contraseña actual no coincide.', 'error');
+        if(!newPass || newPass.length < 1) return this.toast('Escribe una nueva contraseña.', 'error');
+        if(newPass !== newPass2) return this.toast('Las contraseñas no coinciden.', 'error');
+        p.password = newPass;
+        this.saveState();
+        this.closeActionModal();
+        this.toast('Contraseña actualizada.', 'success');
+      };
+    });
+  },
+openStatsEditor(name){
+    const p = this.state.db.profiles[name];
+    if(!p) return;
+    
+    this.openActionModal(`Editar biografía: ${name}`, `
+      <p class="modal-note">Escribe algo sobre ti para que aparezca en tu perfil.</p>
+      <div class="editor-grid">
+        <div style="grid-column:1/-1">
+            <label>Biografía</label>
+            <textarea id="st_bio" style="width:100%; height:100px; background:transparent; color:white; border:1px solid var(--brd); border-radius:8px; padding:10px;">${escapeHTML(p.bio || '')}</textarea>
+        </div>
+      </div>
+      <button class="auth-btn primary" id="saveStatsBtn">Guardar biografía</button>
+    `, () => {
+      document.getElementById('saveStatsBtn').onclick = () => {
+        p.bio = document.getElementById('st_bio').value.trim();
+        this.saveState();
+        this.renderProfile(name);
+        this.closeActionModal();
+        this.toast('Biografía guardada.', 'success');
+      };
+    });
+  },
+  openProfilePicker(){
+    this.openAvatarPickerForProfile();
+  },
+
+  openAvatarPickerForProfile(){
+    const current = this.state.user ? this.state.user.avatar : null;
+    this.state.pendingAvatar = current || null;
+    this.openActionModal('Cambiar ícono', `
+      <p class="modal-note">Elige otro personaje oficial para tu avatar.</p>
+      <input type="text" id="avatarFilter2" class="auth-input" placeholder="Buscar personaje...">
+      <div class="avatar-grid" id="avatarPickerGrid"></div>
+      <button class="auth-btn primary" id="saveAvatarBtn">Guardar ícono</button>
+    `, () => {
+      const render = () => {
+        const q = normalizeName(document.getElementById('avatarFilter2').value || '').toLowerCase();
+        const list = ROASTER_FILTER(q);
+        const grid = document.getElementById('avatarPickerGrid');
+        grid.innerHTML = list.map(name => `<div class="avatar-choice ${this.state.pendingAvatar===name ? 'selected':''}" title="${escapeHTML(name)}" data-name="${escapeHTML(name)}"></div>`).join('');
+        grid.querySelectorAll('.avatar-choice').forEach(el => {
+          const name = el.dataset.name;
+          el.addEventListener('click', () => {
+            this.state.pendingAvatar = name;
+            grid.querySelectorAll('.avatar-choice').forEach(x => x.classList.remove('selected'));
+            el.classList.add('selected');
+          });
+          loadFallbackImage(el, { name, isChar:true }, true);
+        });
+      };
+      document.getElementById('avatarFilter2').addEventListener('input', render);
+      render();
+      document.getElementById('saveAvatarBtn').onclick = () => {
+        if(!this.state.user) return;
+        this.state.user.avatar = this.state.pendingAvatar || this.state.user.name;
+        this.saveState();
+        this.updateAuthUI();
+        this.closeActionModal();
+        this.renderProfile(this.state.currentProfile || this.state.user.name);
+        this.toast('Ícono actualizado.', 'success');
+      };
+    });
+  },
+
+  openActionModal(title, body, onMount, note=''){
+    document.getElementById('chatActionTitle').textContent = title;
+    const noteEl = document.getElementById('chatActionNote');
+    if(note){
+      noteEl.style.display = 'block';
+      noteEl.textContent = note;
+    } else {
+      noteEl.style.display = 'none';
+      noteEl.textContent = '';
+    }
+    document.getElementById('chatActionContent').innerHTML = body;
+    document.getElementById('chatActionModal').classList.add('active');
+    if(typeof onMount === 'function') setTimeout(onMount, 0);
+  },
+
+  openGroupSettingsModal(){
+    if(!this.state.user || !this.state.activeChat) return;
+    const conv = this.state.db.conversations[this.state.activeChat];
+    if(!conv || conv.type !== 'group') return;
+    if(memberRole(conv, this.state.user.name) !== 'admin') return this.toast('Solo el creador del grupo puede cambiar estas opciones.', 'error');
+    this.renderGroupSettings('settings');
+  },
+
+  renderGroupSettings(tab){
+    const conv = this.state.db.conversations[this.state.activeChat];
+    if(!conv) return;
+    const tabs = `
+      <div class="group-tabs">
+        <button class="group-tab ${tab==='settings' ? 'active' : ''}" data-tab="settings">Configuración</button>
+        <button class="group-tab ${tab==='members' ? 'active' : ''}" data-tab="members">Miembros</button>
+        <button class="group-tab ${tab==='roles' ? 'active' : ''}" data-tab="roles">Roles</button>
+      </div>
+    `;
+    let body = '';
+    if(tab === 'settings'){
+      body = `
+        ${tabs}
+        <input type="text" id="groupRenameInput" class="auth-input" value="${escapeHTML(conv.title)}" placeholder="Nombre del grupo">
+        <button class="auth-btn secondary" id="groupIconBtn">Cambiar foto</button>
+        <button class="auth-btn secondary" id="toggleGroupRuleBtn">${conv.onlyAdminWrite ? 'Habilitar mensajes para todos' : 'Restringir (solo admin)'}</button>
+        <button class="auth-btn danger" id="deleteGroupBtn">Eliminar grupo</button>
+      `;
+    } else if(tab === 'members'){
+      body = `
+        ${tabs}
+        <div class="modal-note" style="text-align:left">Agregar o eliminar miembros desde la lista del universo.</div>
+        <input type="text" id="groupMemberSearch" class="auth-input" placeholder="Buscar personaje...">
+        <div class="group-list" id="groupMemberList"></div>
+      `;
+    } else {
+      body = `
+        ${tabs}
+        <div class="modal-note" style="text-align:left">Administra el rol de cada miembro: admin, mod o user.</div>
+        <div class="group-list" id="groupRoleList"></div>
+      `;
+    }
+
+    this.openActionModal(`Grupo: ${conv.title}`, body, () => {
+      document.querySelectorAll('.group-tab').forEach(btn => {
+        btn.onclick = () => this.renderGroupSettings(btn.dataset.tab);
+      });
+
+      if(tab === 'settings'){
+        document.getElementById('renameGroupBtn').onclick = () => {
+          const newName = normalizeName(document.getElementById('groupRenameInput').value);
+          if(!newName) return this.toast('Escribe un nombre.', 'error');
+          conv.title = newName;
+          this.saveState();
+          this.renderChats();
+          this.renderGroupSettings('settings');
+          this.toast('Nombre del grupo actualizado.', 'success');
+        };
+        document.getElementById('groupIconBtn').onclick = () => document.getElementById('groupIconInput').click();
+        document.getElementById('toggleGroupRuleBtn').onclick = () => {
+          conv.onlyAdminWrite = !conv.onlyAdminWrite;
+          this.saveState();
+          this.renderChats();
+          this.openChatById(conv.id);
+          this.renderGroupSettings('settings');
+          this.toast(conv.onlyAdminWrite ? 'Solo admin puede escribir.' : 'Todos pueden escribir.', 'success');
+        };
+        document.getElementById('deleteGroupBtn').onclick = () => {
+          if(!confirm('¿Eliminar este grupo?')) return;
+          delete this.state.db.conversations[conv.id];
+          this.saveState();
+          this.closeActionModal();
+          this.renderChats();
+          this.toast('Grupo eliminado.', 'success');
+          this.state.activeChat = null;
+        };
+      }
+
+      if(tab === 'members'){
+        const input = document.getElementById('groupMemberSearch');
+        const renderMembers = () => {
+          const q = normalizeName(input.value).toLowerCase();
+          const currentNames = membersToNames(conv.members);
+          const available = ROSTER.filter(name => !currentNames.includes(name) && name.toLowerCase().includes(q));
+          const currentList = conv.members.map(m => this.memberItemHTML(conv, m, false)).join('');
+          const availableList = available.map(name => this.memberItemHTML(conv, { name, role:'user' }, true)).join('');
+          document.getElementById('groupMemberList').innerHTML = `
+            <div class="badge-row" style="margin-bottom:8px"><span class="badge">Miembros actuales</span><span class="badge">Disponibles para agregar</span></div>
+            ${currentList || '<div class="modal-note">No hay miembros.</div>'}
+            ${availableList ? `<div style="height:8px"></div>${availableList}` : ''}
+          `;
+          document.querySelectorAll('[data-add-member]').forEach(btn => btn.onclick = () => this.addMemberToGroup(conv.id, btn.dataset.addMember));
+          document.querySelectorAll('[data-remove-member]').forEach(btn => btn.onclick = () => this.removeMemberFromGroup(conv.id, btn.dataset.removeMember));
+        };
+        input.addEventListener('input', renderMembers);
+        renderMembers();
+      }
+
+      if(tab === 'roles'){
+        const currentMembers = conv.members;
+        document.getElementById('groupRoleList').innerHTML = currentMembers.map(m => `
+          <div class="group-member-item">
+            <div class="group-member-left">
+              <div class="mini-avatar"></div>
+              <div>
+                <strong>${escapeHTML(m.name)}</strong>
+                <span>${escapeHTML(m.role || 'user')}</span>
+              </div>
+            </div>
+            <select class="group-role-select" data-role-for="${escapeHTML(m.name)}" style="padding:10px;border-radius:10px;border:1px solid var(--brd);background:rgba(0,0,0,.3);color:#fff">
+              <option value="admin" ${m.role==='admin'?'selected':''}>admin</option>
+              <option value="mod" ${m.role==='mod'?'selected':''}>mod</option>
+              <option value="user" ${(!m.role || m.role==='user')?'selected':''}>user</option>
+            </select>
+          </div>
+        `).join('');
+        document.querySelectorAll('[data-role-for]').forEach(sel => {
+          sel.onchange = () => {
+            const member = conv.members.find(x => keyOf(x.name) === keyOf(sel.dataset.roleFor));
+            if(member){
+              member.role = sel.value;
+              this.saveState();
+              this.toast('Rol actualizado.', 'success');
+            }
+          };
+        });
+      }
+    });
+  },
+
+  memberItemHTML(conv, member, canAdd){
+    const p = this.state.db.profiles[member.name] || defaultProfile(member.name);
+    const role = member.role || 'user';
+    return `
+      <div class="group-member-item">
+        <div class="group-member-left">
+          <div class="mini-avatar" style="background-image:url('')"></div>
+          <div>
+            <strong>${escapeHTML(member.name)}</strong>
+            <span>${escapeHTML(role)}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="group-pill">${escapeHTML(role)}</span>
+          ${canAdd ? `<button class="auth-btn primary" style="width:auto;padding:10px 14px;margin:0" data-add-member="${escapeHTML(member.name)}">Agregar</button>` : `<button class="auth-btn danger" style="width:auto;padding:10px 14px;margin:0" data-remove-member="${escapeHTML(member.name)}">Eliminar</button>`}
+        </div>
+      </div>
+    `;
+  },
+
+  addMemberToGroup(chatId, name){
+    const conv = this.state.db.conversations[chatId];
+    if(!conv || conv.type !== 'group') return;
+    if(memberRole(conv, this.state.user.name) !== 'admin') return this.toast('Solo el creador puede agregar miembros.', 'error');
+    if(conv.members.some(m => keyOf(m.name) === keyOf(name))) return;
+    conv.members.push({ name, role:'user' });
+    const p = this.state.db.profiles[name];
+    if(p){
+      p.notifications.push(`Fuiste agregado al grupo "${conv.title}".`);
+      if(!p.chats[chatId]) p.chats[chatId] = { seen:true };
+    }
+    this.saveState();
+    this.toast(`${name} agregado al grupo.`, 'success');
+    this.renderGroupSettings('members');
+  },
+
+  removeMemberFromGroup(chatId, name){
+    const conv = this.state.db.conversations[chatId];
+    if(!conv || conv.type !== 'group') return;
+    if(memberRole(conv, this.state.user.name) !== 'admin') return this.toast('Solo el creador puede eliminar miembros.', 'error');
+    if(keyOf(name) === keyOf(this.state.user.name)) return this.toast('No puedes eliminarte a ti mismo.', 'error');
+    conv.members = conv.members.filter(m => keyOf(m.name) !== keyOf(name));
+    this.saveState();
+    this.toast(`${name} eliminado del grupo.`, 'success');
+    this.renderGroupSettings('members');
+  },
+
+  openCreateGroupModal(){
+    if(!this.state.user) return this.toast('Inicia sesión para crear un grupo.', 'error');
+    this.openActionModal('Crear grupo', `
+      <input type="text" id="newGroupName" class="auth-input" placeholder="Nombre del grupo">
+      <p class="modal-note" style="text-align:left">Al crearlo, tú quedas como admin. Luego puedes agregar, eliminar y cambiar roles.</p>
+      <button class="auth-btn primary" id="createGroupBtn">Crear</button>
+    `, () => {
+      document.getElementById('createGroupBtn').onclick = () => this.createGroup();
+    });
+  },
+
+  createGroup(){
+    const name = normalizeName(document.getElementById('newGroupName').value);
+    if(!name) return this.toast('Escribe un nombre de grupo.', 'error');
+    const id = makeGroupId(name);
+    if(this.state.db.conversations[id]) return this.toast('Ya existe un grupo con ese nombre.', 'error');
+    const conv = {
+      id,
+      type:'group',
+      title:name,
+      icon:null,
+      members:[{ name:this.state.user.name, role:'admin' }],
+      onlyAdminWrite:false,
+      messages:[]
+    };
+    this.state.db.conversations[id] = conv;
+    if(!this.state.user.createdGroups.includes(id)) this.state.user.createdGroups.push(id);
+    this.saveState();
+    this.closeActionModal();
+    this.renderChats();
+    this.openChatById(id);
+  },
+
+  openNewMessageModal(){
+    if(!this.state.user) return this.toast('Inicia sesión para enviar mensajes.', 'error');
+    this.openActionModal('Nuevo mensaje', `
+      <input type="text" id="chatSearchInput" class="auth-input" placeholder="Buscar personaje...">
+      <div class="search-list" id="chatSearchList"></div>
+    `, () => {
+      const render = (q='') => {
+        const query = normalizeName(q).toLowerCase();
+        const results = ROASTER_FILTER(query);
+        document.getElementById('chatSearchList').innerHTML = results.map(name => `
+          <div class="user-search-item" data-start-dm="${escapeHTML(name)}">
+            <div class="user-search-av"></div>
+            <div class="user-search-info">
+              <strong>${escapeHTML(name)}</strong>
+              <span>Iniciar conversación directa</span>
+            </div>
+          </div>
+        `).join('');
+        document.querySelectorAll('[data-start-dm]').forEach(item => {
+          const name = item.dataset.startDm;
+          item.querySelector('.user-search-av').style.backgroundImage = `url('')`;
+          loadFallbackImage(item.querySelector('.user-search-av'), { name, isChar:true }, true);
+          item.onclick = () => this.startDirectChat(name);
+        });
+      };
+      document.getElementById('chatSearchInput').addEventListener('input', e => render(e.target.value));
+      render('');
+    });
+  },
+
+  startDirectChat(target){
+    const conv = this.getOrCreateDm(this.state.user.name, target);
+    this.closeActionModal();
+    this.renderChats();
+    this.openChatById(conv.id);
+  },
+
+  getOrCreateDm(a,b,skipPersist=false){
+    const id = makeDmId(a,b);
+    if(!this.state.db.conversations[id]){
+      const other = keyOf(a) === keyOf(b) ? b : b;
+      this.state.db.conversations[id] = {
+        id,
+        type:'dm',
+        title: b,
+        members:[{ name:a, role:'user' }, { name:b, role:'user' }],
+        onlyAdminWrite:false,
+        messages:[]
+      };
+      if(!skipPersist){
+        const pa = this.state.db.profiles[a];
+        const pb = this.state.db.profiles[b];
+        if(pa && !pa.chats[id]) pa.chats[id] = { seen:true };
+        if(pb && !pb.chats[id]) pb.chats[id] = { seen:true };
+      }
+      if(skipPersist) this.saveState(false);
+    }
+    return this.state.db.conversations[id];
+  },
+
+  openChatById(chatId, rerender=true){
+    const conv = this.state.db.conversations[chatId];
+    if(!conv) return;
+    this.state.activeChat = chatId;
+    const activeName = document.getElementById('chatActiveName');
+    const activeMeta = document.getElementById('chatActiveMeta');
+    const inputArea = document.getElementById('chatInputArea');
+    const input = document.getElementById('chatInput');
+    const menuBtn = document.getElementById('btnActiveChatMenu');
+    const history = document.getElementById('chatHistory');
+
+    activeName.textContent = conv.type === 'group' ? conv.title : conv.members.find(m => keyOf(m.name) !== keyOf(this.state.user.name)).name;
+    activeMeta.textContent = conv.type === 'group' ? `${conv.members.length} miembros · ${conv.onlyAdminWrite ? 'solo admin escribe' : 'chat libre'}` : 'Mensaje directo';
+    inputArea.classList.remove('hidden');
+
+    const role = memberRole(conv, this.state.user.name);
+    const canWrite = conv.type === 'dm' || !conv.onlyAdminWrite || role === 'admin' || role === 'mod';
+
+    if(conv.type === 'group' && role === 'admin'){
+      menuBtn.classList.remove('hidden');
+    } else {
+      menuBtn.classList.add('hidden');
+    }
+
+    if(!canWrite){
+      inputArea.classList.add('disabled');
+      input.disabled = true;
+      input.placeholder = 'Solo admin puede escribir';
+    } else {
+      inputArea.classList.remove('disabled');
+      input.disabled = false;
+      input.placeholder = 'Escribe un mensaje...';
+    }
+
+    const messagesHTML = conv.messages.map(msg => this.messageHTML(conv, msg)).join('');
+    history.innerHTML = messagesHTML || '<p style="color:var(--muted)">Aún no hay mensajes.</p>';
+    history.scrollTop = history.scrollHeight;
+
+    document.getElementById('btnSendMsg').onclick = () => {
+      const text = normalizeName(input.value);
+      if(!text) return;
+      this.sendMessage(chatId, text);
+      input.value = '';
+      this.openChatById(chatId);
+    };
+
+    if(rerender) this.renderChats();
+  },
+
+ messageHTML(conv, msg){
+  const me = this.state.user && (msg.from === this.state.user.name);
+  const rowClass = me ? 'me' : 'received';
+  const time = msg.ts ? new Date(msg.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+
+  let reactionsHTML = '<div class="reaction-bar">';
+  if(msg.reactions) {
+    Object.entries(msg.reactions).forEach(([emoji, users]) => {
+      if(users && users.length > 0) {
+        reactionsHTML += `<div class="react-pill" onclick="app.toggleReaction('${conv.id}', '${msg.id}', '${emoji}')">${emoji} ${users.length}</div>`;
+      }
+    });
+  }
+  reactionsHTML += '</div>';
+
+  return `
+    <div class="msg-row ${rowClass}">
+      <div class="msg-stack">
+        ${!me ? `<div class="msg-head">${msg.from}</div>` : ''}
+        <div class="msg-bubble">
+          ${msg.type === 'image' ? `<img src="${msg.fileUrl}" style="max-width:200px;border-radius:10px;margin-bottom:5px;">` : `<span>${msg.text}</span>`}
+          <div class="msg-time">${time}</div>
+          <div class="reaction-trigger" onclick="document.getElementById('picker-${msg.id}').classList.toggle('active')">☺</div>
+          <div class="reaction-picker" id="picker-${msg.id}">
+            <span onclick="app.toggleReaction('${conv.id}', '${msg.id}', '❤️')">❤️</span>
+            <span onclick="app.toggleReaction('${conv.id}', '${msg.id}', '🔥')">🔥</span>
+            <span onclick="app.toggleReaction('${conv.id}', '${msg.id}', '😂')">😂</span>
+            <span onclick="app.toggleReaction('${conv.id}', '${msg.id}', '😮')">😮</span>
+          </div>
+        </div>
+        ${reactionsHTML}
+      </div>
+    </div>
+  `;
+},
+
+  reactionButtons(conv, msg){
+    return REACTIONS.map(r => {
+      const active = this.hasUserReacted(msg, r.emoji);
+      return `<button class="react-btn ${active ? 'active' : ''}" data-react="${escapeHTML(r.emoji)}" data-msg="${escapeHTML(msg.id)}" title="${escapeHTML(r.label)}">${r.emoji}</button>`;
+    }).join('');
+  },
+
+  reactionCounts(msg){
+    if(!msg.reactions) return '';
+    return REACTIONS.map(r => {
+      const count = (msg.reactions[r.emoji] || []).length;
+      return count ? `<span class="react-count">${escapeHTML(r.emoji)} ${count}</span>` : '';
+    }).join('');
+  },
+
+  hasUserReacted(msg, emoji){
+    const actor = currentActorId(this);
+    return !!(msg.reactions && msg.reactions[emoji] && msg.reactions[emoji].includes(actor));
+  },
+
+  sendMessage(chatId, text){
+    const conv = this.state.db.conversations[chatId];
+    if(!conv || !this.state.user) return;
+    const role = memberRole(conv, this.state.user.name);
+    if(conv.type === 'group' && conv.onlyAdminWrite && role !== 'admin' && role !== 'mod'){
+      return this.toast('Solo el admin puede escribir en este grupo.', 'error');
+    }
+    const msg = {
+      id: nowId(),
+      from: this.state.user.name,
+      fromAvatar: this.state.user.avatar || this.state.user.name,
+      text,
+      ts: Date.now(),
+      reactions: {}
+    };
+    conv.messages.push(msg);
+
+    // Bot / realtime style replies for some official contacts
+    if(conv.type === 'dm'){
+      const other = conv.members.find(m => keyOf(m.name) !== keyOf(this.state.user.name));
+      if(other){
+        setTimeout(() => {
+          const otherConv = this.state.db.conversations[chatId];
+          if(!otherConv) return;
+          if(keyOf(other.name) === keyOf('Dua Lingo')) {
+            otherConv.messages.push({ id: nowId(), from:'Dua Lingo', fromAvatar:'Dua Lingo', text:'Pio Pio', ts:Date.now(), reactions:{} });
+          } else if(keyOf(other.name) === keyOf('Dios')) {
+            otherConv.messages.push({ id: nowId(), from:'Dios', fromAvatar:'Dios', text:'Nadie es mejor que yo', ts:Date.now(), reactions:{} });
+          }
+          this.saveState();
+          this.broadcastNow();
+          if(this.state.activeChat === chatId) this.openChatById(chatId, false);
+        }, 500);
+      }
+    }
+
+    this.saveState();
+    this.broadcastNow();
+  },
+
+  broadcastNow(){
+    if(this.state.broadcast){
+      this.state.broadcast.postMessage({ type:'sync', ts: Date.now() });
+    }
+  },
+
+  toggleReaction(chatId, msgId, emoji){
+    const conv = this.state.db.conversations[chatId];
+    if(!conv) return;
+    const msg = conv.messages.find(m => m.id === msgId);
+    if(!msg) return;
+    msg.reactions = msg.reactions || {};
+    if(!msg.reactions[emoji]) msg.reactions[emoji] = [];
+
+    const actor = currentActorId(this);
+    // remove other reactions from same actor
+    Object.keys(msg.reactions).forEach(k => {
+      const idx = msg.reactions[k].indexOf(actor);
+      if(idx > -1) msg.reactions[k].splice(idx,1);
+    });
+    // toggle selected reaction
+    const idx = msg.reactions[emoji].indexOf(actor);
+    if(idx > -1){
+      msg.reactions[emoji].splice(idx,1);
+    } else {
+      msg.reactions[emoji].push(actor);
+    }
+    this.saveState();
+    this.broadcastNow();
+    this.openChatById(chatId, false);
+  },
+
+  openFileIconPicker(){
+    document.getElementById('groupIconInput').click();
+  },
+
+  renderChats(){
+    if(!this.state.user){
+      document.getElementById('chatContacts').innerHTML = '<p style="padding:10px;color:#aaa">Inicia sesión para ver tus mensajes.</p>';
+      document.getElementById('chatHistory').innerHTML = '';
+      document.getElementById('chatInputArea').classList.add('hidden');
+      return;
+    }
+
+    this.ensurePersonalChats(this.state.user.name);
+    const userName = this.state.user.name;
+    const convs = Object.values(this.state.db.conversations).filter(c => c.members.some(m => keyOf(m.name) === keyOf(userName)));
+    convs.sort((a,b) => (b.messages[b.messages.length-1]?.ts || 0) - (a.messages[a.messages.length-1]?.ts || 0));
+
+    document.getElementById('chatContacts').innerHTML = convs.map(conv => {
+      const last = conv.messages[conv.messages.length-1];
+      const preview = last ? last.text : 'Ver mensajes...';
+      const isGroup = conv.type === 'group';
+      const title = isGroup ? conv.title : conv.members.find(m => keyOf(m.name) !== keyOf(userName))?.name || conv.title;
+      return `
+        <div class="chat-contact ${this.state.activeChat === conv.id ? 'active' : ''}" data-open-chat="${escapeHTML(conv.id)}">
+          <div class="av"></div>
+          <div class="info">
+            <p class="name">${escapeHTML(title)}${isGroup ? ` <span style="color:var(--muted);font-size:11px">(${conv.members.length})</span>` : ''}</p>
+            <p class="msg">${escapeHTML(preview)}</p>
+          </div>
+        </div>
+      `;
+    }).join('') || '<p style="padding:10px;color:#aaa">No tienes chats todavía.</p>';
+
+    document.querySelectorAll('[data-open-chat]').forEach(el => {
+      const id = el.dataset.openChat;
+      const conv = this.state.db.conversations[id];
+      const avatarEl = el.querySelector('.av');
+      const isGroup = conv.type === 'group';
+      if(isGroup){
+        if(conv.icon){
+          avatarEl.style.backgroundImage = `url('${conv.icon}')`;
+        } else {
+          avatarEl.textContent = conv.title.slice(0,2).toUpperCase();
+        }
+      } else {
+        const other = conv.members.find(m => keyOf(m.name) !== keyOf(userName))?.name || conv.title;
+        loadFallbackImage(avatarEl, { name: other, isChar:true }, true);
+      }
+      el.onclick = () => this.openChatById(id);
+    });
+
+    if(this.state.activeChat && this.state.db.conversations[this.state.activeChat]){
+      this.openChatById(this.state.activeChat, false);
+    } else if(convs[0]){
+      this.openChatById(convs[0].id, false);
+    } else {
+      document.getElementById('chatHistory').innerHTML = '';
+    }
+
+    // message reaction delegation
+    document.querySelectorAll('.react-btn').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        this.toggleReaction(this.state.activeChat, btn.dataset.msg, btn.dataset.react);
+      };
+    });
+  },
+
+  showNotificationsForCurrentUser(){
+    if(!this.state.user) return;
+    if(this.state.user.notifications && this.state.user.notifications.length){
+      this.state.user.notifications.forEach(msg => this.toast(msg, 'success'));
+      this.state.user.notifications = [];
+      this.saveState();
+    }
+  }
+};
+
+function ROASTER_FILTER(q){
+  if(!q) return ROSTER;
+  return ROSTER.filter(name => name.toLowerCase().includes(q));
+}
+function ROlSTER_SEARCH(q){
+  return ROSTER.filter(name => name.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').includes(q))
+    .map(name => ({ id:'char-'+name, name, isChar:true, meta:'Participante', kind:'Perfil', accent:getColor(name) }));
+}
+
+app.toast = function(message, type='info'){
+  const t = document.getElementById('toast');
+  t.textContent = message;
+  t.className = `toast show ${type}`;
+  clearTimeout(this.toastTimer);
+  this.toastTimer = setTimeout(() => t.className = 'toast', 2400);
+};
+
+document.addEventListener('DOMContentLoaded', () => app.init());
+
+document.getElementById('heroGo').addEventListener('click', () => app.goToHeroProfileOrLink());
+document.getElementById('heroFollow').addEventListener('click', () => {
+  const card = app.state.currentCard;
+  if(card && (card.isChar || card.kind === 'Perfil')){
+    app.toggleFollow(card.name);
+  }
+});
+document.getElementById('userProfileBtn').addEventListener('click', () => document.getElementById('profileMenu').classList.toggle('show'));
+document.getElementById('menuLoginBtn').addEventListener('click', () => app.openAuth(false));
+document.getElementById('menuLogoutBtn').addEventListener('click', () => app.logout());
+document.getElementById('menuEditIconBtn').addEventListener('click', () => app.openProfilePicker());
+document.getElementById('menuEditNameBtn').addEventListener('click', () => app.openNameEditor());
+document.getElementById('menuEditPasswordBtn').addEventListener('click', () => app.openPasswordEditor(app.state.user ? app.state.user.name : ''));
+document.getElementById('menuMyProfileBtn').addEventListener('click', () => app.openProfile(app.state.user.name));
+document.getElementById('authSubmitBtn').addEventListener('click', () => app.attemptLogin());
+document.getElementById('confirmAvatarBtn').addEventListener('click', () => app.finishLoginWithAvatar());
+document.getElementById('backToLoginBtn').addEventListener('click', () => {
+  document.getElementById('authStep2').classList.add('hidden');
+  document.getElementById('authStep1').classList.remove('hidden');
+  document.getElementById('authTitle').textContent = app.state.editingIcon ? 'Cambiar ícono' : 'Iniciar sesión';
+});
+document.getElementById('avatarFilterInput').addEventListener('input', () => app.renderAvatarPicker());
+document.getElementById('groupIconInput').addEventListener('change', (e) => {
+  const file = e.target.files && e.target.files[0];
+  if(!file || !app.state.activeChat) return;
+  const conv = app.state.db.conversations[app.state.activeChat];
+  if(!conv || conv.type !== 'group') return;
+  if(memberRole(conv, app.state.user.name) !== 'admin'){
+    app.toast('Solo el creador del grupo puede cambiar la foto.', 'error');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    conv.icon = reader.result;
+    app.saveState();
+    app.renderChats();
+    app.openChatById(conv.id);
+    app.toast('Foto del grupo actualizada.', 'success');
+  };
+  reader.readAsDataURL(file);
+});
+document.getElementById('btnNewChat').addEventListener('click', () => app.openNewMessageModal());
+document.getElementById('btnGroupOptions').addEventListener('click', () => app.openCreateGroupModal());
+document.getElementById('btnActiveChatMenu').addEventListener('click', () => app.openGroupSettingsModal());
+document.getElementById('searchInput').addEventListener('input', (e) => app.doSearch(e.target.value));
+
+document.addEventListener('click', (e) => {
+  if(e.target.closest('.nav-item')){
+    app.navigate(e.target.closest('.nav-item').dataset.target);
+  }
+  if(e.target.closest('.nav-arrow')){
+    const arrow = e.target.closest('.nav-arrow');
+    const track = arrow.parentElement.querySelector('.track');
+    if(!track) return;
+    const dir = arrow.classList.contains('left') ? -1 : 1;
+    track.scrollBy({ left: dir * track.clientWidth * .7, behavior:'smooth' });
+  }
+  if(!e.target.closest('#profileMenu') && !e.target.closest('#userProfileBtn')){
+    document.getElementById('profileMenu').classList.remove('show');
+  }
+  if(e.target.closest('.group-tab')) return;
+});
+
+app.openNameEditor = function(){
+  if(!this.state.user) return;
+  this.openActionModal('Cambiar nombre', `
+    <p class="modal-note">Por ahora no puedes cambiar tu nombre.</p>
+    <input type="text" id="renameInput" class="auth-input" value="${escapeHTML(this.state.user.name)}">
+    <button class="auth-btn primary" id="saveRenameBtn">Guardar nombre</button>
+  `, () => {
+    document.getElementById('saveRenameBtn').onclick = () => {
+      const newName = normalizeName(document.getElementById('renameInput').value);
+      if(!newName) return this.toast('Escribe un nombre.', 'error');
+      if(!ROSTER.includes(newName)) return this.toast('No tienes permiso para hacer esto.', 'error');
+      if(this.state.db.profiles[newName] && keyOf(newName) !== keyOf(this.state.user.name)) return this.toast('Ese usuario ya existe.', 'error');
+      const oldName = this.state.user.name;
+      const oldKey = keyOf(oldName);
+      const newKey = keyOf(newName);
+      if(oldKey === newKey){
+        this.closeActionModal();
+        return;
+      }
+      const oldProfile = this.state.db.profiles[oldName];
+      this.state.db.profiles[newName] = oldProfile;
+      delete this.state.db.profiles[oldName];
+      this.state.db.profiles[newName].name = newName;
+      this.state.db.profiles[newName].password = this.state.db.profiles[newName].password || oldName;
+      this.state.user = this.state.db.profiles[newName];
+      this.state.userKey = newName;
+      // migrate conversation membership names and dms title references
+      Object.values(this.state.db.conversations).forEach(conv => {
+        conv.members.forEach(m => { if(keyOf(m.name) === oldKey) m.name = newName; });
+        conv.messages.forEach(msg => { if(keyOf(msg.from) === oldKey) msg.from = newName; if(keyOf(msg.fromAvatar) === oldKey) msg.fromAvatar = newName; });
+        if(conv.type === 'dm'){
+          const other = conv.members.find(m => keyOf(m.name) !== newKey);
+          conv.title = other ? other.name : conv.title;
+        }
+      });
+      localStorage.setItem(CURRENT_SESSION_KEY, newName);
+      this.saveState();
+      this.updateAuthUI();
+      this.closeActionModal();
+      this.toast('Nombre actualizado.', 'success');
+      if(this.state.currentProfile && keyOf(this.state.currentProfile) === oldKey) this.state.currentProfile = newName;
+      if(this.state.view === 'profile') this.renderProfile(this.state.currentProfile || newName);
+      this.renderChats();
+    };
+  });
+};
+
+app.openActionModal = function(title, body, onMount, note=''){
+  document.getElementById('chatActionTitle').textContent = title;
+  const n = document.getElementById('chatActionNote');
+  if(note){ n.style.display = 'block'; n.textContent = note; } else { n.style.display = 'none'; n.textContent = ''; }
+  document.getElementById('chatActionContent').innerHTML = body;
+  document.getElementById('chatActionModal').classList.add('active');
+  if(typeof onMount === 'function') setTimeout(onMount, 0);
+};
+
+app.renderGroupSettings = app.renderGroupSettings.bind(app);
+app.openGroupSettingsModal = app.openGroupSettingsModal.bind(app);
+app.renderProfile = app.renderProfile.bind(app);
+
+document.getElementById('chatActionModal').addEventListener('click', (e) => {
+  if(e.target.id === 'chatActionModal') app.closeActionModal();
+});
+document.getElementById('authModal').addEventListener('click', (e) => {
+  if(e.target.id === 'authModal') app.closeAuth();
+});
+document.getElementById('chatActionContent').addEventListener('click', (e) => {
+  const tab = e.target.closest('.group-tab');
+  if(tab){
+    app.renderGroupSettings(tab.dataset.tab);
+  }
+});
+</script>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, onValue, push, set, update, remove, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDzr1AlXYOqw1IVWpJvQ-7aeHJS0p9KaEQ",
+    authDomain: "the-xpedition.firebaseapp.com",
+    databaseURL: "https://the-xpedition-default-rtdb.firebaseio.com",
+    projectId: "the-xpedition",
+    storageBucket: "the-xpedition.firebasestorage.app",
+    messagingSenderId: "163499451928",
+    appId: "1:163499451928:web:abca7f7d61cb2c616f856d"
+  };
+
+  const fbApp = initializeApp(firebaseConfig);
+  const db = getDatabase(fbApp);
+
+  // Sincronizar chat y permisos de Admin en tiempo real
+  app.openChatById = function(chatId) {
+    this.state.activeChat = chatId;
+    document.getElementById('chatInputArea').classList.remove('hidden');
+    
+    const chatRef = ref(db, `conversations/${chatId}`);
+    
+    // ESCUCHAR METADATOS (Nombre del grupo, Solo Admin puede escribir, etc)
+    onValue(chatRef, (snapshot) => {
+        const data = snapshot.val();
+        if(!data) return;
+        
+        document.getElementById('chatActiveName').innerText = data.title;
+        const isAdmin = data.admin === this.state.user.name;
+
+        // Bloqueo de chat si el admin activó la restricción
+        if(data.onlyAdminWrite && !isAdmin) {
+            document.getElementById('chatInput').disabled = true;
+            document.getElementById('chatInput').placeholder = "Solo el Admin puede enviar mensajes";
+        } else {
+            document.getElementById('chatInput').disabled = false;
+            document.getElementById('chatInput').placeholder = "Escribe un mensaje...";
+        }
+    });
+
+    // ESCUCHAR MENSAJES (Live Sync)
+    onValue(ref(db, `conversations/${chatId}/messages`), (snapshot) => {
+        const msgs = snapshot.val() || {};
+        const history = document.getElementById('chatHistory');
+        const conv = { id: chatId, type: 'group' }; // Referencia rápida
+        history.innerHTML = Object.entries(msgs).map(([id, m]) => {
+            m.id = id; 
+            return this.messageHTML(conv, m);
+        }).join('');
+        history.scrollTop = history.scrollHeight;
+    });
+  };
+
+  // Acción para cambiar nombre del grupo (ADMIN)
+  app.saveGroupInfo = function() {
+      const newName = document.getElementById('groupRenameInput').value;
+      const restrict = document.getElementById('groupOnlyAdminCheck').checked;
+      if(!newName) return;
+      
+      update(ref(db, `conversations/${this.state.activeChat}`), {
+          title: newName,
+          onlyAdminWrite: restrict
+      });
+      
+      // Mensaje de sistema automático
+      const mRef = push(ref(db, `conversations/${this.state.activeChat}/messages`));
+      set(mRef, { type: 'system', text: `El admin actualizó la configuración del grupo`, ts: serverTimestamp() });
+      this.closeActionModal();
+  };
+
+  // Reacciones en tiempo real con lista de usuarios
+  app.toggleReaction = function(chatId, msgId, emoji) {
+    const rRef = ref(db, `conversations/${chatId}/messages/${msgId}/reactions/${emoji}`);
+    onValue(rRef, (snap) => {
+      let users = snap.val() || [];
+      const myName = this.state.user.name;
+      users = users.includes(myName) ? users.filter(u => u !== myName) : [...users, myName];
+      update(ref(db, `conversations/${chatId}/messages/${msgId}/reactions`), { [emoji]: users });
+    }, { onlyOnce: true });
+    // Cerrar el panel
+    document.querySelectorAll('.reaction-picker').forEach(p => p.classList.remove('active'));
+  };
+
+  // Enviar mensaje real
+  app.sendMessage = function(chatId, text) {
+      const mRef = push(ref(db, `conversations/${chatId}/messages`));
+      set(mRef, { from: this.state.user.name, text: text, ts: serverTimestamp() });
+  };
+</script>
+</body>
+</html>
